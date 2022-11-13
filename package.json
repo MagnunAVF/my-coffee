@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/MagnunAVF/my-coffee/issues"
   },
-  "homepage": "https://github.com/MagnunAVF/my-coffee#readme"
+  "homepage": "https://github.com/MagnunAVF/my-coffee#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
