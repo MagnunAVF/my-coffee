@@ -1,0 +1,20 @@
+{
+  "name": "my-coffee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MagnunAVF/my-coffee.git"
+  },
+  "keywords": [],
+  "author": "Magnun A V F",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MagnunAVF/my-coffee/issues"
+  },
+  "homepage": "https://github.com/MagnunAVF/my-coffee#readme"
+}
