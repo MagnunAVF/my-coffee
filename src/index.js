@@ -22,9 +22,7 @@ app.use(expressLayouts)
 app.set('layout', './components/layout.ejs')
 
 // routes
-app.get('/', (req, res) => {
-  res.render('index', { title: 'Home Page' })
-})
+app.use('/', require('./routes'))
 
 // start server
 app.listen(port, () => {
