@@ -15,11 +15,17 @@ const env = process.env.ENV || 'dev'
 // assets folder
 app.use(express.static(__dirname + '/public'))
 
+// set logger
+global.log = log
+
 // template engine and layouts
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(expressLayouts)
 app.set('layout', './components/layout.ejs')
+
+// Body Parsing
+app.use(express.urlencoded({ extended: false }))
 
 // routes
 app.use('/', require('./routes'))
