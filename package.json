@@ -23,6 +23,7 @@
   "homepage": "https://github.com/MagnunAVF/my-coffee#readme",
   "dependencies": {
     "@prisma/client": "^4.6.1",
+    "bcryptjs": "^2.4.3",
     "chalk": "^4.1.2",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
