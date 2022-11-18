@@ -40,6 +40,7 @@
     "prisma": "^4.6.1"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "node src/db/seed.js",
+    "schema": "src/db/schema.prisma"
   }
 }
