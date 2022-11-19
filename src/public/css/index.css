@@ -1,0 +1,21 @@
+body {
+  background-color: #fff;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+main {
+  min-height: calc(100vh - 120px);
+}
+
+footer {
+  height: 60px;
+}
+
+footer p {
+  margin: 0px;
+}
+
+nav {
+  height: 60px;
+}

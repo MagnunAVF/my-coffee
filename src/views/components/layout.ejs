@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>
+        <%- title %>
+    </title>
+    <link rel="stylesheet" href="css/index.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <%- include('./header.ejs') %>
+
+    <% if (notification) { %>
+        <% switch (notification.type) {
+            case 'error' : %>
+                <div class="alert alert-danger" role="alert">
+                    <%- notification.message %>
+                </div>
+                <% break;
+            case 'success' : %>
+                <div class="alert alert-success" role="alert">
+                    <%- notification.message %>
+                </div>
+                <% break;
+            case 'warning' : %>
+                <div class="alert alert-warning" role="alert">
+                    <%- notification.message %>
+                </div>
+                <% break;
+        } %>
+    <% } %>
+
+    <main class="d-flex align-items-center justify-content-center">
+        <%- body %>
+    </main>
+
+    <%- include('./footer.ejs') %>
+</body>
+
+</html>
