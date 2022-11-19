@@ -3,12 +3,24 @@ const path = require('path')
 const dotenv = require('dotenv')
 const expressLayouts = require('express-ejs-layouts')
 const prismaLib = require('@prisma/client')
+const passport = require('passport')
+const session = require('express-session')
 
 const { log } = require('./utils/log')
 const { checkDbConnection } = require('./utils/db')
 
 const app = express()
+
 dotenv.config()
+
+// set logger
+global.log = log
+
+// set db client
+global.prisma = new prismaLib.PrismaClient()
+
+const { loginCheck } = require('./auth/passport')
+loginCheck(passport)
 
 // env vars
 const port = process.env.PORT || 3000
@@ -16,12 +28,6 @@ const env = process.env.ENV || 'dev'
 
 // assets folder
 app.use(express.static(__dirname + '/public'))
-
-// set logger
-global.log = log
-
-// set db client
-global.prisma = new prismaLib.PrismaClient()
 
 // template engine and layouts
 app.set('view engine', 'ejs')
@@ -31,6 +37,18 @@ app.set('layout', './components/layout.ejs')
 
 // Body Parsing
 app.use(express.urlencoded({ extended: false }))
+
+// User Session
+app.use(
+  session({
+    secret: 'oneboy',
+    saveUninitialized: true,
+    resave: true,
+  })
+)
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 // routes
 app.use('/', require('./routes'))
