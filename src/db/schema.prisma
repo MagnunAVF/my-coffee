@@ -15,4 +15,17 @@ model User {
   name      String
   type      String
   password  String
+  products  Product[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String
+  price       Float
+  imageUrl    String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
 }
