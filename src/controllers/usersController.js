@@ -11,7 +11,7 @@ const { User } = require('../models/user')
 const registerView = (req, res) => {
   log.info('GET /register route requested')
 
-  const params = defaultRenderParameters()
+  const params = defaultRenderParameters(req)
   params.title += ' - Register'
 
   res.render('register', params)
@@ -24,6 +24,7 @@ const registerUser = (req, res) => {
   const { name, email, password, confirm } = req.body
   if (!name || !email || !password || !confirm) {
     renderWithError(
+      req,
       res,
       'register',
       'Register',
@@ -33,6 +34,7 @@ const registerUser = (req, res) => {
   // validate password confirmation
   else if (password !== confirm) {
     renderWithError(
+      req,
       res,
       'register',
       'Register',
@@ -44,7 +46,7 @@ const registerUser = (req, res) => {
     User.findUnique({ where: { email } }).then((user) => {
       // Uniq email validation
       if (user) {
-        renderWithError(res, 'register', 'Register', 'Email already used.')
+        renderWithError(req, res, 'register', 'Register', 'Email already used.')
       } else {
         try {
           // Password Hashing
@@ -65,7 +67,7 @@ const registerUser = (req, res) => {
                   type: 'client',
                 },
               }).then(() => {
-                const params = defaultRenderParameters()
+                const params = defaultRenderParameters(req)
                 params.title += ' - Login'
                 params.notification = {
                   type: 'success',
@@ -80,6 +82,7 @@ const registerUser = (req, res) => {
           log.error(err)
 
           renderWithError(
+            req,
             res,
             'register',
             'Register',
@@ -94,7 +97,7 @@ const registerUser = (req, res) => {
 const loginView = (req, res) => {
   log.info('GET /login route requested')
 
-  const params = defaultRenderParameters()
+  const params = defaultRenderParameters(req)
   params.title += ' - Login'
 
   res.render('login', params)
@@ -107,7 +110,7 @@ const loginUser = (req, res) => {
 
   // Check required fields
   if (!email || !password) {
-    renderWithError(res, 'login', 'Login', 'You must fill all fields')
+    renderWithError(req, res, 'login', 'Login', 'You must fill all fields')
   } else {
     // Authenticate User
     passport.authenticate('local', {

@@ -3,7 +3,7 @@ const { defaultRenderParameters } = require('../utils/response')
 const adminDashboardView = (req, res) => {
   log.info('GET /admin route requested')
 
-  const params = defaultRenderParameters()
+  const params = defaultRenderParameters(req)
   params.title += ' - Admin Dashboard'
   params.notification = {
     type: 'success',
