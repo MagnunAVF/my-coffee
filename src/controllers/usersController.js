@@ -93,10 +93,26 @@ const loginUser = (req, res) => {
     })
   } else {
     passport.authenticate('local', {
-      successRedirect: '/',
+      successRedirect: '/user-home',
       failureRedirect: '/login',
       failureFlash: true,
     })(req, res)
+  }
+}
+
+const renderUserHome = (req, res) => {
+  const userType = req.user.type
+
+  switch (userType) {
+    case 'admin':
+      res.redirect('/admin')
+      break
+    case 'client':
+      res.redirect('/')
+      break
+    default:
+      res.redirect('/server-error')
+      break
   }
 }
 
@@ -115,4 +131,5 @@ module.exports = {
   loginView,
   registerUser,
   loginUser,
+  renderUserHome,
 }
