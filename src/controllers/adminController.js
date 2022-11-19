@@ -1,8 +1,16 @@
+const { defaultRenderParameters } = require('../utils/response')
+
 const adminDashboardView = (req, res) => {
-  res.render('adminDashboard', {
-    title: 'My Coffee - Admin Dashboard',
-    notification: { type: 'success', message: 'Welcome admin !' },
-  })
+  log.info('GET /admin route requested')
+
+  const params = defaultRenderParameters()
+  params.title += ' - Admin Dashboard'
+  params.notification = {
+    type: 'success',
+    message: 'Welcome admin !',
+  }
+
+  res.render('adminDashboard', params)
 }
 
 module.exports = {

@@ -1,13 +1,20 @@
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 
+const {
+  defaultRenderParameters,
+  renderWithError,
+} = require('../utils/response')
 const { User } = require('../models/user')
 
 // Controller methods
 const registerView = (req, res) => {
   log.info('GET /register route requested')
 
-  res.render('register', { title: 'My Coffee - Register', notification: false })
+  const params = defaultRenderParameters()
+  params.title += ' - Register'
+
+  res.render('register', params)
 }
 
 const registerUser = (req, res) => {
@@ -16,18 +23,28 @@ const registerUser = (req, res) => {
   // validate attributes
   const { name, email, password, confirm } = req.body
   if (!name || !email || !password || !confirm) {
-    renderRegisterWithError(res, 'Invalid atributes in user register.')
+    renderWithError(
+      res,
+      'register',
+      'Register',
+      'Invalid atributes in user register.'
+    )
   }
   // validate password confirmation
   else if (password !== confirm) {
-    renderRegisterWithError(res, 'Password and confirmation are not the same.')
+    renderWithError(
+      res,
+      'register',
+      'Register',
+      'Password and confirmation are not the same.'
+    )
   }
   // Create user
   else {
     User.findUnique({ where: { email } }).then((user) => {
       // Uniq email validation
       if (user) {
-        renderRegisterWithError(res, 'Email already used.')
+        renderWithError(res, 'register', 'Register', 'Email already used.')
       } else {
         try {
           // Password Hashing
@@ -47,21 +64,25 @@ const registerUser = (req, res) => {
                   password: encryptedPassword,
                   type: 'client',
                 },
-              }).then(
-                res.render('login', {
-                  title: 'My Coffee - Login',
-                  notification: {
-                    type: 'success',
-                    message: 'User created! Now you can login.',
-                  },
-                })
-              )
+              }).then(() => {
+                const params = defaultRenderParameters()
+                params.title += ' - Login'
+                params.notification = {
+                  type: 'success',
+                  message: 'User created! Now you can login.',
+                }
+
+                res.render('login', params)
+              })
             })
           })
         } catch (err) {
           log.error(err)
-          renderRegisterWithError(
+
+          renderWithError(
             res,
+            'register',
+            'Register',
             'Error in user register. Contact support.'
           )
         }
@@ -73,25 +94,22 @@ const registerUser = (req, res) => {
 const loginView = (req, res) => {
   log.info('GET /login route requested')
 
-  res.render('login', { title: 'My Coffee - Login', notification: false })
+  const params = defaultRenderParameters()
+  params.title += ' - Login'
+
+  res.render('login', params)
 }
 
 const loginUser = (req, res) => {
+  log.info('POST /register route requested')
+
   const { email, password } = req.body
 
   // Check required fields
   if (!email || !password) {
-    const message = 'You must fill all fields'
-    log.warn(message)
-
-    res.render('login', {
-      title: 'My Coffee - Login',
-      notification: {
-        type: 'error',
-        message,
-      },
-    })
+    renderWithError(res, 'login', 'Login', 'You must fill all fields')
   } else {
+    // Authenticate User
     passport.authenticate('local', {
       successRedirect: '/user-home',
       failureRedirect: '/login',
@@ -100,6 +118,7 @@ const loginUser = (req, res) => {
   }
 }
 
+// Redirect User based on type
 const renderUserHome = (req, res) => {
   const userType = req.user.type
 
@@ -114,16 +133,6 @@ const renderUserHome = (req, res) => {
       res.redirect('/server-error')
       break
   }
-}
-
-// Helper methods
-const renderRegisterWithError = (res, message) => {
-  log.warn(message)
-
-  res.render('register', {
-    title: 'My Coffee - Register',
-    notification: { type: 'error', message },
-  })
 }
 
 module.exports = {

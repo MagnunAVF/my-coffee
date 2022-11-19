@@ -1,5 +1,12 @@
+const { defaultRenderParameters } = require('../utils/response')
+
 const homeView = (req, res) => {
-  res.render('index', { title: 'My Coffee - Home Page', notification: false })
+  log.info('GET / route requested')
+
+  const params = defaultRenderParameters()
+  params.title += ' - Home Page'
+
+  res.render('index', params)
 }
 
 module.exports = {
