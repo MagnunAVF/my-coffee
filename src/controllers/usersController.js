@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs')
+const passport = require('passport')
+
 const { User } = require('../models/user')
 
 // Controller methods
@@ -74,6 +76,30 @@ const loginView = (req, res) => {
   res.render('login', { title: 'My Coffee - Login', notification: false })
 }
 
+const loginUser = (req, res) => {
+  const { email, password } = req.body
+
+  // Check required fields
+  if (!email || !password) {
+    const message = 'You must fill all fields'
+    log.warn(message)
+
+    res.render('login', {
+      title: 'My Coffee - Login',
+      notification: {
+        type: 'error',
+        message,
+      },
+    })
+  } else {
+    passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/login',
+      failureFlash: true,
+    })(req, res)
+  }
+}
+
 // Helper methods
 const renderRegisterWithError = (res, message) => {
   log.warn(message)
@@ -88,4 +114,5 @@ module.exports = {
   registerView,
   loginView,
   registerUser,
+  loginUser,
 }
