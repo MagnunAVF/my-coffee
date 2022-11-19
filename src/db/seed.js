@@ -1,15 +1,16 @@
 const prisma = require('@prisma/client')
+const bcrypt = require('bcryptjs')
 const log = require('loglevel')
 log.enableAll()
 
 const prismaClient = new prisma.PrismaClient()
 
-const userData = [
+const usersData = [
   {
     name: 'Master Blaster',
     email: 'master@admin.com',
     type: 'admin',
-    password: 'masteradmin',
+    password: 'blasterAdmin*9',
   },
   {
     name: 'Nilu',
@@ -25,14 +26,35 @@ const userData = [
   },
 ]
 
-async function main() {
-  log.info('Start seeding ...')
-  for (const u of userData) {
-    const user = await prismaClient.user.create({
-      data: u,
+const createUser = async (user) => {
+  try {
+    // Password Hashing
+    const salt = await bcrypt.genSalt(10)
+    const encryptedPassword = await bcrypt.hash(user.password, salt)
+    const { name, email, type } = user
+
+    const createdUser = await prismaClient.user.create({
+      data: {
+        name,
+        email,
+        password: encryptedPassword,
+        type,
+      },
     })
-    log.info(`Created user with id: ${user.id}`)
+
+    log.info(`Created user with id: ${createdUser.id}`)
+  } catch (error) {
+    log.error(`Error creating user: ${error}`)
   }
+}
+
+const main = async () => {
+  log.info('Start seeding ...')
+
+  for await (const user of usersData) {
+    await createUser(user)
+  }
+
   log.info('Seeding finished.')
 }
 
