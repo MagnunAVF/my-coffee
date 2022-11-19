@@ -104,7 +104,7 @@ const loginView = (req, res) => {
 }
 
 const loginUser = (req, res) => {
-  log.info('POST /register route requested')
+  log.info('POST /login route requested')
 
   const { email, password } = req.body
 
@@ -121,8 +121,25 @@ const loginUser = (req, res) => {
   }
 }
 
+const logoutUser = (req, res, next) => {
+  log.info('GET /logout route requested')
+
+  req.session.user = null
+  req.session.save((err) => {
+    if (err) next(err)
+
+    req.session.regenerate((err) => {
+      if (err) next(err)
+
+      res.redirect('/')
+    })
+  })
+}
+
 // Redirect User based on type
 const renderUserHome = (req, res) => {
+  log.info('GET /user-home route requested')
+
   const userType = req.user.type
 
   switch (userType) {
@@ -143,5 +160,6 @@ module.exports = {
   loginView,
   registerUser,
   loginUser,
+  logoutUser,
   renderUserHome,
 }

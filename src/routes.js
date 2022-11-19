@@ -5,6 +5,7 @@ const {
   loginView,
   registerUser,
   loginUser,
+  logoutUser,
   renderUserHome,
 } = require('./controllers/usersController')
 const { homeView } = require('./controllers/homeController')
@@ -22,6 +23,7 @@ router.post('/register', registerUser)
 router.get('/login', loginView)
 router.post('/login', loginUser)
 router.get('/user-home', renderUserHome)
+router.get('/logout', logoutUser)
 
 // Admin Area
 router.get('/admin', protectRoute, adminDashboardView)
