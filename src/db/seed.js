@@ -26,6 +26,19 @@ const usersData = [
   },
 ]
 
+const postsData = [
+  {
+    title: 'Benefício do Café - Melhorar memória e concentração',
+    content:
+      'Por ser rico em cafeína, um composto estimulante do sistema nervoso central, o café ajuda a melhorar a memória e o estado de alerta, além de aumentar a capacidade de concentração e diminuir o sono.',
+  },
+  {
+    title: 'Benefício do Café - Evitar a depressão',
+    content:
+      'Os polifenóis presentes em ótimas quantidades no café combatem os radicais livres e diminuem inflamações nas células do sistema nervoso central, o que contribui para reduzir a ansiedade e melhorar o humor, prevenindo quadros de depressão.',
+  },
+]
+
 const categoriesData = [
   {
     name: 'Acessórios',
@@ -97,15 +110,26 @@ const createUser = async (user) => {
     const salt = await bcrypt.genSalt(10)
     const encryptedPassword = await bcrypt.hash(user.password, salt)
 
-    // Create User
-    const createdUser = await prismaClient.user.create({
+    // Add posts in admin user
+    let createParams = {
       data: {
         ...user,
         password: encryptedPassword,
       },
-    })
+    }
 
-    log.info(`* Created user with id: ${createdUser.id}`)
+    if (user.type === 'admin') {
+      createParams.include = { posts: true }
+      createParams.data.posts = {
+        create: postsData,
+      }
+    }
+
+    // Create User
+    const createdUser = await prismaClient.user.create(createParams)
+
+    log.info(`* Created ${user.type} user with id: ${createdUser.id}`)
+    if (user.type === 'admin') log.info(' ** Also created admin user posts')
   } catch (error) {
     log.error(`Error creating user: ${error}`)
 
@@ -175,19 +199,32 @@ const getDbData = async () => {
   log.info('\n* Getting db data ...')
 
   log.info('\n* Users:')
-
   const users = await prismaClient.user.findMany()
   users.map((user) => {
     log.info('\n** User infos:')
     log.info(user)
   })
 
+  log.info('\n* Posts:')
+  const posts = await prismaClient.post.findMany({ include: { owner: true } })
+  posts.map((post) => {
+    const { name, type } = post.owner
+    delete post['owner']
+
+    log.info('\n** Post infos:')
+    log.info(post)
+    log.info('*** Post Owner:')
+    log.info(`name: ${name} ; user type: ${type}`)
+  })
+
+  log.info('\n* Categories:')
   const categories = await prismaClient.category.findMany()
   categories.map((category) => {
     log.info('\n** Category infos: ')
     log.info(category)
   })
 
+  log.info('\n* Products:')
   const products = await prismaClient.product.findMany({
     include: { categories: { include: { category: true } } },
   })

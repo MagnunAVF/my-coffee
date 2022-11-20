@@ -15,6 +15,17 @@ model User {
   name       String
   type       String
   password   String
+  posts      Post[]
+}
+
+model Post {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String   @unique
+  content     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
 }
 
 model Product {
