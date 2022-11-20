@@ -1,11 +1,12 @@
 const { setGlobalPosts } = require('../models/post')
+const { matchRoute } = require('./routes')
 
 const TITLE_PREFIX = 'My Coffee'
 const SHOW_POSTS_ROUTES = ['/']
 
 const defaultRenderParameters = async (req) => {
-  const route = req.route.path
-  const showPosts = SHOW_POSTS_ROUTES.includes(route)
+  const route = req.originalUrl
+  const showPosts = matchRoute(route, SHOW_POSTS_ROUTES)
 
   // TODO: improve posts render with pagination in component
   if (showPosts) {

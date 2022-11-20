@@ -1,6 +1,7 @@
 const { renderWithError } = require('../utils/response')
+const { matchRoute } = require('../utils/routes')
 
-const ADMIN_ROUTES = ['/admin', '/products']
+const ADMIN_ROUTES = ['/admin', '/products', '/products/create']
 
 const protectRoute = async (req, res, next) => {
   // Check if user is authenticated
@@ -8,8 +9,8 @@ const protectRoute = async (req, res, next) => {
     await renderWithError(req, res, 'users/login', 'Login', 'Login to continue')
   } else {
     // Check admin route
-    const route = req.route.path
-    const isAdminRoute = ADMIN_ROUTES.includes(route)
+    const route = req.originalUrl
+    const isAdminRoute = matchRoute(route, ADMIN_ROUTES)
 
     if (isAdminRoute) {
       const userType = req.user.type
