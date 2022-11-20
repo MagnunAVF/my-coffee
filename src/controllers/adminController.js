@@ -5,10 +5,7 @@ const adminDashboardView = async (req, res) => {
 
   const params = await defaultRenderParameters(req)
   params.title += ' - Admin Dashboard'
-  params.notification = {
-    type: 'success',
-    message: 'Welcome admin !',
-  }
+  params.notification = false
 
   res.render('adminDashboard', params)
 }
