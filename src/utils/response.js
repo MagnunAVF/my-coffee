@@ -7,6 +7,7 @@ const defaultRenderParameters = async (req) => {
   const route = req.route.path
   const showPosts = SHOW_POSTS_ROUTES.includes(route)
 
+  // TODO: improve posts render with pagination in component
   if (showPosts) {
     await setGlobalPosts()
   }

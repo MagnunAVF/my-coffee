@@ -1,6 +1,6 @@
 const { renderWithError } = require('../utils/response')
 
-const ADMIN_ROUTES = ['/admin']
+const ADMIN_ROUTES = ['/admin', '/products']
 
 const protectRoute = async (req, res, next) => {
   // Check if user is authenticated

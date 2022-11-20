@@ -1,0 +1,46 @@
+<div class="d-flex flex-wrap align-items-start justify-content-center h-100 w-100">
+    <div class="my-3">
+        <h1><u>Products</u></h1>
+
+        <a href="/products/create" type="button" role="button" class="btn btn-outline-success m-3"
+            data-toggle="tooltip" data-placement="bottom" title="create new product">
+            <i class="fa-solid fa-plus"></i>  Create
+        </a>
+
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price (R$)</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(function(product){ %>
+                    <tr>
+                        <th data-toggle="tooltip" data-placement="bottom" title=<%- product.id %>><%- product.id.substring(0,8) + '...' %></th>
+                        <td><%- product.name %></td>
+                        <td><%- product.price %></td>
+                        <td>
+                            <div class="d-flex flex-wrap">
+                                <a href=<%- "/products/show/" + product.id %> type="button" role="button" class="btn btn-outline-success m-1"
+                                    data-toggle="tooltip" data-placement="bottom" title="view details">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                <a href=<%- "/products/edit/" + product.id %> type="button" role="button" class="btn btn-outline-warning m-1"
+                                    data-toggle="tooltip" data-placement="bottom" title="edit">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href=<%- "/products/delete/" + product.id %> type="button" role="button" class="btn btn-outline-danger m-1"
+                                    data-toggle="tooltip" data-placement="bottom" title="delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+          </table>
+    </div>
+</div>

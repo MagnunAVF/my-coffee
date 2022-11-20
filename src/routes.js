@@ -8,6 +8,7 @@ const {
   logoutUser,
   renderUserHome,
 } = require('./controllers/usersController')
+const { listProductsView } = require('./controllers/productsController')
 const { homeView } = require('./controllers/homeController')
 const { adminDashboardView } = require('./controllers/adminController')
 const { protectRoute } = require('./auth/protect')
@@ -27,5 +28,8 @@ router.get('/logout', logoutUser)
 
 // Admin Area
 router.get('/admin', protectRoute, adminDashboardView)
+
+// Admin Products CRUD
+router.get('/products', protectRoute, listProductsView)
 
 module.exports = router
