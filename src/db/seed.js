@@ -26,6 +26,21 @@ const usersData = [
   },
 ]
 
+const categoriesData = [
+  {
+    name: 'Acessórios',
+  },
+  {
+    name: 'Eletrônicos',
+  },
+  {
+    name: 'Café em Grãos',
+  },
+  {
+    name: 'Café',
+  },
+]
+
 const productsData = [
   {
     name: 'Jarra de vidro Hario 360 ml',
@@ -34,6 +49,7 @@ const productsData = [
     price: 244.01,
     imageUrl:
       'https://cafestore.vteximg.com.br/arquivos/ids/158004-1000-1000/hario-jarra360ml-vidro4.jpg?v=637277852841930000',
+    categories: ['Acessórios'],
   },
   {
     name: 'Cafeteira Individual com Moedor Hamilton Beach Preta 2 Xícaras 127V',
@@ -42,6 +58,7 @@ const productsData = [
     price: 949.33,
     imageUrl:
       'https://cafestore.vteximg.com.br/arquivos/ids/161013-1000-1000/3276_Cafeteira-Individual-com-Moedor-Hamilton-Beach-Preta-2-Xicaras-127V_1.jpg?v=638010102017700000',
+    categories: ['Eletrônicos'],
   },
   {
     name: 'Café Black Tucano Honey Coffee em grãos 250 g',
@@ -50,6 +67,7 @@ const productsData = [
     price: 37.55,
     imageUrl:
       'https://cafestore.vteximg.com.br/arquivos/ids/158257-1000-1000/cafe-black-tucano-honey.jpg?v=637296384377100000',
+    categories: ['Café', 'Café em Grãos'],
   },
   {
     name: 'Café Constantino em grãos 250g',
@@ -58,6 +76,7 @@ const productsData = [
     price: 23.62,
     imageUrl:
       'https://cafestore.vteximg.com.br/arquivos/ids/158088-1000-1000/cafe-constantino-graos-250g.jpg?v=637279166559070000',
+    categories: ['Café', 'Café em Grãos'],
   },
   {
     name: 'Café Black Tucano Premium Blend em grãos 250 g',
@@ -66,38 +85,27 @@ const productsData = [
     price: 32.77,
     imageUrl:
       'https://cafestore.vteximg.com.br/arquivos/ids/158259-1000-1000/cafe-black-tucano-premium.jpg?v=637296386167270000',
+    categories: ['Café', 'Café em Grãos'],
   },
 ]
+
+let createdCategories = {}
 
 const createUser = async (user) => {
   try {
     // Password Hashing
     const salt = await bcrypt.genSalt(10)
     const encryptedPassword = await bcrypt.hash(user.password, salt)
-    const { name, email, type } = user
-
-    // Create products if admin
-    const createArgs = {
-      data: {
-        name,
-        email,
-        password: encryptedPassword,
-        type,
-      },
-    }
-
-    if (type === 'admin') {
-      createArgs.include = { products: true }
-      createArgs.data.products = {
-        create: productsData,
-      }
-    }
 
     // Create User
-    const createdUser = await prismaClient.user.create(createArgs)
+    const createdUser = await prismaClient.user.create({
+      data: {
+        ...user,
+        password: encryptedPassword,
+      },
+    })
 
     log.info(`* Created user with id: ${createdUser.id}`)
-    if (type === 'admin') log.info(' ** Also created admin user products')
   } catch (error) {
     log.error(`Error creating user: ${error}`)
 
@@ -105,28 +113,93 @@ const createUser = async (user) => {
   }
 }
 
+const createCategory = async (category) => {
+  try {
+    const { name } = category
+
+    // Create Category
+    const createdCategory = await prismaClient.category.create({
+      data: {
+        name,
+      },
+    })
+
+    const categoryId = createdCategory.id
+    createdCategories[name] = categoryId
+    log.info(`* Created category with id: ${categoryId}`)
+  } catch (error) {
+    log.error(`Error creating category: ${error}`)
+
+    throw error
+  }
+}
+
+const createProduct = async (product) => {
+  try {
+    // find categories ids created in db
+    const categoriesIds = Object.keys(createdCategories)
+      .filter((e) => product.categories.includes(e))
+      .map((e) => createdCategories[e])
+
+    // Create Product
+    const createdProduct = await prismaClient.product.create({
+      data: {
+        ...product,
+        categories: {
+          create: categoriesIds.reduce(
+            (acc, val) => [
+              ...acc,
+              {
+                category: {
+                  connect: {
+                    id: val,
+                  },
+                },
+              },
+            ],
+            []
+          ),
+        },
+      },
+    })
+
+    log.info(`* Created product with id: ${createdProduct.id}`)
+  } catch (error) {
+    log.error(`Error creating product: ${error}`)
+
+    throw error
+  }
+}
+
 const getDbData = async () => {
-  log.info('\n### Getting db data ...')
+  log.info('\n* Getting db data ...')
 
   log.info('\n* Users:')
-  const users = await prismaClient.user.findMany({
-    include: {
-      products: true,
-    },
+
+  const users = await prismaClient.user.findMany()
+  users.map((user) => {
+    log.info('\n** User infos:')
+    log.info(user)
   })
 
-  users.map((user) => {
-    const srcProducts = user.products
-    const userData = user
-    userData.products =
-      user.products.length > 0 ? 'products list bellow' : user.products
-    log.info('\n** New User infos:')
-    log.info(userData)
+  const categories = await prismaClient.category.findMany()
+  categories.map((category) => {
+    log.info('\n** Category infos: ')
+    log.info(category)
+  })
 
-    if (user.products.length > 0) {
-      log.info('*** User products: ')
-      srcProducts.map((product) => log.info(product))
-    }
+  const products = await prismaClient.product.findMany({
+    include: { categories: { include: { category: true } } },
+  })
+
+  products.map(async (product) => {
+    const categories = product.categories
+    delete product['categories']
+
+    log.info('\n** Product infos: ')
+    log.info(product)
+    log.info('*** Product categories: ')
+    log.info(categories.map((e) => e.category.name))
   })
 
   log.info('\n### Done!\n')
@@ -135,11 +208,25 @@ const getDbData = async () => {
 const main = async () => {
   log.info('\n### Start seeding ...')
 
-  // Create users
   try {
+    // Create users
     await Promise.all(
       usersData.map(async (user) => {
         await createUser(user)
+      })
+    )
+
+    // Create categories
+    await Promise.all(
+      categoriesData.map(async (category) => {
+        await createCategory(category)
+      })
+    )
+
+    // Create products
+    await Promise.all(
+      productsData.map(async (product) => {
+        await createProduct(product)
       })
     )
   } catch (error) {
