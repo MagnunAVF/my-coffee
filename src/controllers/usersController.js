@@ -14,7 +14,7 @@ const registerView = async (req, res) => {
   const params = await defaultRenderParameters(req)
   params.title += ' - Register'
 
-  res.render('register', params)
+  res.render('users/register', params)
 }
 
 const registerUser = async (req, res) => {
@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
     await renderWithError(
       req,
       res,
-      'register',
+      'users/register',
       'Register',
       'Invalid atributes in user register.'
     )
@@ -36,7 +36,7 @@ const registerUser = async (req, res) => {
     await renderWithError(
       req,
       res,
-      'register',
+      'users/register',
       'Register',
       'Password and confirmation are not the same.'
     )
@@ -49,7 +49,7 @@ const registerUser = async (req, res) => {
       await renderWithError(
         req,
         res,
-        'register',
+        'users/register',
         'Register',
         'Email already used.'
       )
@@ -76,14 +76,14 @@ const registerUser = async (req, res) => {
           message: 'User created! Now you can login.',
         }
 
-        res.render('login', params)
+        res.render('users/login', params)
       } catch (err) {
         log.error(err)
 
         await renderWithError(
           req,
           res,
-          'register',
+          'users/register',
           'Register',
           'Error in user register. Contact support.'
         )
@@ -98,7 +98,7 @@ const loginView = async (req, res) => {
   const params = await defaultRenderParameters(req)
   params.title += ' - Login'
 
-  res.render('login', params)
+  res.render('users/login', params)
 }
 
 const loginUser = async (req, res) => {
@@ -111,7 +111,7 @@ const loginUser = async (req, res) => {
     await renderWithError(
       req,
       res,
-      'login',
+      'users/login',
       'Login',
       'You must fill all fields'
     )

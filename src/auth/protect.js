@@ -5,7 +5,7 @@ const ADMIN_ROUTES = ['/admin']
 const protectRoute = async (req, res, next) => {
   // Check if user is authenticated
   if (!req.isAuthenticated()) {
-    await renderWithError(req, res, 'login', 'Login', 'Login to continue')
+    await renderWithError(req, res, 'users/login', 'Login', 'Login to continue')
   } else {
     // Check admin route
     const route = req.route.path
