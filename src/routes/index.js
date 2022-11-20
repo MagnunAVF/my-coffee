@@ -7,13 +7,15 @@ const {
   loginUser,
   logoutUser,
   renderUserHome,
-} = require('./controllers/usersController')
-const { listProductsView } = require('./controllers/productsController')
-const { homeView } = require('./controllers/homeController')
-const { adminDashboardView } = require('./controllers/adminController')
-const { protectRoute } = require('./auth/protect')
+} = require('../controllers/usersController')
+const { homeView } = require('../controllers/homeController')
+const { adminDashboardView } = require('../controllers/adminController')
+const { protectRoute } = require('../auth/protect')
 
 const router = express.Router()
+
+// Products Routes
+router.use('/products', require('./products'))
 
 // Home
 router.get('/', homeView)
@@ -28,8 +30,5 @@ router.get('/logout', logoutUser)
 
 // Admin Area
 router.get('/admin', protectRoute, adminDashboardView)
-
-// Admin Products CRUD
-router.get('/products', protectRoute, listProductsView)
 
 module.exports = router

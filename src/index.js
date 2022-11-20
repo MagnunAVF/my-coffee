@@ -51,7 +51,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // routes
-app.use('/', require('./routes'))
+app.use('/', require('./routes/index'))
 
 // start server
 app.listen(port, async () => {
