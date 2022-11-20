@@ -17,7 +17,7 @@ const registerView = (req, res) => {
   res.render('register', params)
 }
 
-const registerUser = (req, res) => {
+const registerUser = async (req, res) => {
   log.info('POST /register route requested')
 
   // validate attributes
@@ -43,54 +43,46 @@ const registerUser = (req, res) => {
   }
   // Create user
   else {
-    User.findUnique({ where: { email } }).then((user) => {
-      // Uniq email validation
-      if (user) {
-        renderWithError(req, res, 'register', 'Register', 'Email already used.')
-      } else {
-        try {
-          // Password Hashing
-          bcrypt.genSalt(10, (err, salt) => {
-            if (err) throw err
+    // Uniq email validation
+    const user = await User.findUnique({ where: { email } })
+    if (user) {
+      renderWithError(req, res, 'register', 'Register', 'Email already used.')
+    } else {
+      try {
+        // Password Hashing
+        const salt = await bcrypt.genSalt(10)
+        const encryptedPassword = await bcrypt.hash(password, salt)
 
-            bcrypt.hash(password, salt, (err, hash) => {
-              if (err) throw err
+        // Create User
+        await User.create({
+          data: {
+            name,
+            email,
+            type: 'client',
+            password: encryptedPassword,
+          },
+        })
 
-              let encryptedPassword = hash
-
-              // Create new user with encrypted password
-              User.create({
-                data: {
-                  name,
-                  email,
-                  password: encryptedPassword,
-                  type: 'client',
-                },
-              }).then(() => {
-                const params = defaultRenderParameters(req)
-                params.title += ' - Login'
-                params.notification = {
-                  type: 'success',
-                  message: 'User created! Now you can login.',
-                }
-
-                res.render('login', params)
-              })
-            })
-          })
-        } catch (err) {
-          log.error(err)
-
-          renderWithError(
-            req,
-            res,
-            'register',
-            'Register',
-            'Error in user register. Contact support.'
-          )
+        const params = defaultRenderParameters(req)
+        params.title += ' - Login'
+        params.notification = {
+          type: 'success',
+          message: 'User created! Now you can login.',
         }
+
+        res.render('login', params)
+      } catch (err) {
+        log.error(err)
+
+        renderWithError(
+          req,
+          res,
+          'register',
+          'Register',
+          'Error in user register. Contact support.'
+        )
       }
-    })
+    }
   }
 }
 
