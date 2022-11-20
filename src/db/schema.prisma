@@ -8,24 +8,38 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
-  name      String
-  type      String
-  password  String
-  products  Product[]
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  email      String   @unique
+  name       String
+  type       String
+  password   String
 }
 
 model Product {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  name        String
+  name        String   @unique
   description String
   price       Float
   imageUrl    String
-  owner       User     @relation(fields: [ownerId], references: [id])
-  ownerId     String
+  categories  ProductCategories[]
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  products    ProductCategories[]
+}
+
+model ProductCategories {
+  id          String    @id @default(uuid())
+  product     Product?  @relation(fields: [productId], references: [id])
+  category    Category? @relation(fields: [categoryId], references: [id])
+  productId   String?
+  categoryId  String?
 }
