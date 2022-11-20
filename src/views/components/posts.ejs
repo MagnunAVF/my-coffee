@@ -2,21 +2,12 @@
     <h1><u>Blog Posts</u></h1>
     
     <div class="d-flex flex-wrap align-items-center justify-content-around m-0 p-2">
-        <div class="flex-fill p-3 m-2 bg-white">
-            <h3>Title 1</h3>
-            <p class="m-0">Description 1</p>
-        </div>
-        <div class="flex-fill p-3 m-2 bg-white">
-            <h3>Title 2</h3>
-            <p class="m-0">Description 2 dsjadh jsd hsaiudh sauidh asuidh ashdashdasuhidasidhsauihd ashdiashd uhasdhasdhasd</p>
-        </div>
-        <div class="flex-fill p-3 m-2 bg-white">
-            <h3>Title 1</h3>
-            <p class="m-0">Description 1</p>
-        </div>
-        <div class="flex-fill p-3 m-2 bg-white">
-            <h3>Title 1</h3>
-            <p class="m-0">Description 1</p>
-        </div>
+        <% posts.forEach(function(post){ %>
+            <div class="flex-fill p-3 m-2 bg-white">
+                <h3><%- post.title %></h3>
+                <p class="m-0"><%- post.content %></p>
+                <p class="m-0 mt-3 font-weight-bold">Autor: <%- post.owner.name %></p>
+            </div>
+        <% }) %>
     </div>
 </div>

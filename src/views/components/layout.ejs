@@ -50,7 +50,9 @@
                     <div class="col d-flex flex-column justify-content-between align-items-center">
                         <%- body %>
 
-                        <%- include('./posts.ejs') %>
+                        <% if (showPosts) { %>
+                            <%- include('./posts.ejs') %>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -60,7 +62,9 @@
                     <div class="col d-flex flex-column justify-content-between align-items-center">
                         <%- body %>
 
-                        <%- include('./posts.ejs') %>
+                        <% if (showPosts) { %>
+                            <%- include('./posts.ejs') %>
+                        <% } %>
                     </div>
                 </div>
             </div>

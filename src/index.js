@@ -54,12 +54,23 @@ app.use(passport.session())
 app.use('/', require('./routes'))
 
 // start server
-app.listen(port, () => {
-  checkDbConnection(prisma).then((error) => {
-    if (error) {
-      process.exit(1)
-    }
+app.listen(port, async () => {
+  try {
+    await checkDbConnection(prisma)
+
+    // Init app data
+    log.info('Getting app initial data ...')
+
+    // get created posts
+    const { Post } = require('./models/post')
+    global.posts = await Post.findMany({ include: { owner: true } })
+
+    log.info('Initial data setted!')
 
     log.info(`Running in ${env} mode in http://127.0.0.1:${port}`)
-  })
+  } catch (error) {
+    log.error(error)
+
+    process.exit(1)
+  }
 })

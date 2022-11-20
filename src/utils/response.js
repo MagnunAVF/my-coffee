@@ -1,10 +1,20 @@
 const TITLE_PREFIX = 'My Coffee'
+const SHOW_POSTS_ROUTES = ['/']
+
+const showPosts = (route) => {
+  return SHOW_POSTS_ROUTES.includes(route)
+}
 
 const defaultRenderParameters = (req) => {
+  const route = req.route.path
+
   const defaultParams = {
     title: TITLE_PREFIX,
     notification: false,
     user: false,
+    showPosts: showPosts(route),
+    route,
+    posts,
   }
 
   if (req.user) defaultParams.user = req.user
