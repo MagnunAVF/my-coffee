@@ -8,10 +8,10 @@ const {
 const { User } = require('../models/user')
 
 // Controller methods
-const registerView = (req, res) => {
+const registerView = async (req, res) => {
   log.info('GET /register route requested')
 
-  const params = defaultRenderParameters(req)
+  const params = await defaultRenderParameters(req)
   params.title += ' - Register'
 
   res.render('register', params)
@@ -23,7 +23,7 @@ const registerUser = async (req, res) => {
   // validate attributes
   const { name, email, password, confirm } = req.body
   if (!name || !email || !password || !confirm) {
-    renderWithError(
+    await renderWithError(
       req,
       res,
       'register',
@@ -33,7 +33,7 @@ const registerUser = async (req, res) => {
   }
   // validate password confirmation
   else if (password !== confirm) {
-    renderWithError(
+    await renderWithError(
       req,
       res,
       'register',
@@ -46,7 +46,13 @@ const registerUser = async (req, res) => {
     // Uniq email validation
     const user = await User.findUnique({ where: { email } })
     if (user) {
-      renderWithError(req, res, 'register', 'Register', 'Email already used.')
+      await renderWithError(
+        req,
+        res,
+        'register',
+        'Register',
+        'Email already used.'
+      )
     } else {
       try {
         // Password Hashing
@@ -63,7 +69,7 @@ const registerUser = async (req, res) => {
           },
         })
 
-        const params = defaultRenderParameters(req)
+        const params = await defaultRenderParameters(req)
         params.title += ' - Login'
         params.notification = {
           type: 'success',
@@ -74,7 +80,7 @@ const registerUser = async (req, res) => {
       } catch (err) {
         log.error(err)
 
-        renderWithError(
+        await renderWithError(
           req,
           res,
           'register',
@@ -86,23 +92,29 @@ const registerUser = async (req, res) => {
   }
 }
 
-const loginView = (req, res) => {
+const loginView = async (req, res) => {
   log.info('GET /login route requested')
 
-  const params = defaultRenderParameters(req)
+  const params = await defaultRenderParameters(req)
   params.title += ' - Login'
 
   res.render('login', params)
 }
 
-const loginUser = (req, res) => {
+const loginUser = async (req, res) => {
   log.info('POST /login route requested')
 
   const { email, password } = req.body
 
   // Check required fields
   if (!email || !password) {
-    renderWithError(req, res, 'login', 'Login', 'You must fill all fields')
+    await renderWithError(
+      req,
+      res,
+      'login',
+      'Login',
+      'You must fill all fields'
+    )
   } else {
     // Authenticate User
     passport.authenticate('local', {

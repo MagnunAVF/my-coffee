@@ -1,9 +1,9 @@
 const { defaultRenderParameters } = require('../utils/response')
 
-const adminDashboardView = (req, res) => {
+const adminDashboardView = async (req, res) => {
   log.info('GET /admin route requested')
 
-  const params = defaultRenderParameters(req)
+  const params = await defaultRenderParameters(req)
   params.title += ' - Admin Dashboard'
   params.notification = {
     type: 'success',

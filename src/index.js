@@ -58,14 +58,8 @@ app.listen(port, async () => {
   try {
     await checkDbConnection(prisma)
 
-    // Init app data
-    log.info('Getting app initial data ...')
-
-    // get created posts
-    const { Post } = require('./models/post')
-    global.posts = await Post.findMany({ include: { owner: true } })
-
-    log.info('Initial data setted!')
+    // set inital app data
+    global.posts = []
 
     log.info(`Running in ${env} mode in http://127.0.0.1:${port}`)
   } catch (error) {
