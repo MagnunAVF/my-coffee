@@ -22,6 +22,15 @@ const defaultRenderParameters = async (req) => {
     posts,
   }
 
+  // check notifications in query string
+  const { notification, type } = req.query
+  if (notification && type) {
+    defaultParams.notification = {
+      message: notification,
+      type,
+    }
+  }
+
   if (req.user) defaultParams.user = req.user
   defaultParams.user.password = null
 
