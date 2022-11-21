@@ -1,21 +1,11 @@
-const { Product, getProducts } = require('../models/product')
+const { Product, getProducts, deleteProduct } = require('../models/product')
 const {
   defaultRenderParameters,
   renderWithError,
 } = require('../utils/response')
 
 const listProductsView = async (req, res) => {
-  log.info('GET /products route requested')
-
-  // load products to show
-  // TODO: add pagination
-  const products = await getProducts()
-
-  const params = await defaultRenderParameters(req)
-  params.title += ' - Products List'
-  params.products = products
-
-  res.render('products/list', params)
+  await renderProductsList(req, res, false)
 }
 
 const createProductView = async (req, res) => {
@@ -64,18 +54,12 @@ const createProduct = async (req, res) => {
           },
         })
 
-        // get products to render
-        const products = await getProducts()
-
-        const params = await defaultRenderParameters(req)
-        params.title += ' - Products List'
-        params.notification = {
+        const notification = {
           type: 'success',
           message: 'Product created!',
         }
-        params.products = products
 
-        res.render('products/list', params)
+        await renderProductsList(req, res, notification)
       } catch (err) {
         log.error(err)
 
@@ -91,8 +75,44 @@ const createProduct = async (req, res) => {
   }
 }
 
+const deleteProductRoute = async (req, res) => {
+  const { id } = req.params
+
+  log.info(`DELETE /products/${id} route requested`)
+
+  try {
+    await deleteProduct(id)
+
+    res.status(200).json({ message: 'Product deleted!' })
+  } catch (error) {
+    log.error(error)
+
+    res
+      .status(500)
+      .json({ message: 'Error deleting product. Contact support.' })
+  }
+}
+
+// helper
+const renderProductsList = async (req, res, notification) => {
+  log.info('GET /products route requested')
+
+  // load products to show
+  // TODO: add pagination
+  const products = await getProducts()
+
+  const params = await defaultRenderParameters(req)
+  params.title += ' - Products List'
+  params.products = products
+
+  if (!params.notification) params.notification = notification
+
+  res.render('products/list', params)
+}
+
 module.exports = {
   listProductsView,
   createProductView,
   createProduct,
+  deleteProductRoute,
 }

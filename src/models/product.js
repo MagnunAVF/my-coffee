@@ -6,7 +6,14 @@ const getProducts = async () => {
   return products
 }
 
+const deleteProduct = async (id) => {
+  await Product.delete({
+    where: { id },
+  })
+}
+
 module.exports = {
   Product,
   getProducts,
+  deleteProduct,
 }
