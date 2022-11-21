@@ -1,4 +1,10 @@
-const { Product, getProducts, deleteProduct } = require('../models/product')
+const {
+  Product,
+  getProducts,
+  deleteProduct,
+  getProductByName,
+  getProductById,
+} = require('../models/product')
 const {
   defaultRenderParameters,
   renderWithError,
@@ -34,7 +40,7 @@ const createProduct = async (req, res) => {
   // Create Product
   else {
     // Uniq product validation
-    const product = await Product.findUnique({ where: { name } })
+    const product = await getProductByName(name)
     if (product) {
       await renderWithError(
         req,
@@ -93,6 +99,20 @@ const deleteProductRoute = async (req, res) => {
   }
 }
 
+const productDetailstView = async (req, res) => {
+  const { id } = req.params
+
+  log.info(`GET /products/${id} route requested`)
+
+  const product = await getProductById(id)
+
+  const params = await defaultRenderParameters(req)
+  params.title += ' - Product Create'
+  params.product = product
+
+  res.render('products/show', params)
+}
+
 // helper
 const renderProductsList = async (req, res, notification) => {
   log.info('GET /products route requested')
@@ -115,4 +135,5 @@ module.exports = {
   createProductView,
   createProduct,
   deleteProductRoute,
+  productDetailstView,
 }
