@@ -1,10 +1,10 @@
 const {
-  Product,
   getProducts,
   deleteProduct,
   getProductByName,
   getProductById,
   updateProduct,
+  createProduct,
 } = require('../models/product')
 const {
   defaultRenderParameters,
@@ -25,7 +25,7 @@ const createProductView = async (req, res) => {
   res.render('products/create', params)
 }
 
-const createProduct = async (req, res) => {
+const createProductRoute = async (req, res) => {
   log.info('POST /products route requested')
 
   // validate attributes
@@ -53,14 +53,14 @@ const createProduct = async (req, res) => {
       )
     } else {
       try {
-        await Product.create({
-          data: {
-            name,
-            description,
-            price: parseFloat(price),
-            imageUrl,
-          },
-        })
+        const data = {
+          name,
+          description,
+          price: parseFloat(price),
+          imageUrl,
+        }
+
+        await createProduct(data)
 
         const notification = {
           type: 'success',
@@ -204,7 +204,7 @@ const renderProductsList = async (req, res, notification) => {
 module.exports = {
   listProductsView,
   createProductView,
-  createProduct,
+  createProductRoute,
   deleteProductMethod,
   productDetailstView,
   editProductView,

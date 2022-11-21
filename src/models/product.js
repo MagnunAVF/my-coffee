@@ -24,6 +24,10 @@ const deleteProduct = async (id) => {
   })
 }
 
+const createProduct = async (data) => {
+  await Product.create({ data })
+}
+
 const updateProduct = async (id, data) => {
   await Product.update({
     where: { id },
@@ -37,5 +41,6 @@ module.exports = {
   getProductById,
   getProductByName,
   deleteProduct,
+  createProduct,
   updateProduct,
 }

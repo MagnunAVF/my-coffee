@@ -3,7 +3,7 @@ const express = require('express')
 const {
   listProductsView,
   createProductView,
-  createProduct,
+  createProductRoute,
   deleteProductMethod,
   productDetailstView,
   editProductView,
@@ -16,7 +16,7 @@ const router = express.Router()
 // Admin Products CRUD
 router.get('/', protectRoute, listProductsView)
 router.get('/create', protectRoute, createProductView)
-router.post('/', protectRoute, createProduct)
+router.post('/', protectRoute, createProductRoute)
 router.get('/:id/edit', protectRoute, editProductView)
 router.put('/:id', protectRoute, updateProductMethod)
 router.get('/:id', protectRoute, productDetailstView)
