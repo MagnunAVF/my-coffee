@@ -37,6 +37,9 @@ app.set('layout', './components/layout.ejs')
 
 // Body Parsing
 app.use(express.urlencoded({ extended: false }))
+// Allow put forms
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'))
 
 // User Session
 app.use(

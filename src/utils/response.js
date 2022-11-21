@@ -47,7 +47,16 @@ const renderWithError = async (req, res, page, pageTitle, message) => {
   res.render(page, params)
 }
 
+const redirectWithNotification = (res, route, notification) => {
+  const { message, type } = notification
+
+  if (message && type) {
+    res.redirect(`${route}?notification=${message}&type=${type}`)
+  }
+}
+
 module.exports = {
   defaultRenderParameters,
   renderWithError,
+  redirectWithNotification,
 }

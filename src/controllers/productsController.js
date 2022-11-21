@@ -4,10 +4,12 @@ const {
   deleteProduct,
   getProductByName,
   getProductById,
+  updateProduct,
 } = require('../models/product')
 const {
   defaultRenderParameters,
   renderWithError,
+  redirectWithNotification,
 } = require('../utils/response')
 
 const listProductsView = async (req, res) => {
@@ -24,7 +26,7 @@ const createProductView = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-  log.info('POST /products/create route requested')
+  log.info('POST /products route requested')
 
   // validate attributes
   const { name, description, price, imageUrl } = req.body
@@ -81,7 +83,7 @@ const createProduct = async (req, res) => {
   }
 }
 
-const deleteProductRoute = async (req, res) => {
+const deleteProductMethod = async (req, res) => {
   const { id } = req.params
 
   log.info(`DELETE /products/${id} route requested`)
@@ -107,10 +109,79 @@ const productDetailstView = async (req, res) => {
   const product = await getProductById(id)
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Product Create'
+  params.title += ' - Product Details'
   params.product = product
 
   res.render('products/show', params)
+}
+
+const editProductView = async (req, res) => {
+  const { id } = req.params
+
+  log.info(`GET /products/${id}/edit route requested`)
+
+  const product = await getProductById(id)
+
+  const params = await defaultRenderParameters(req)
+  params.title += ' - Product Edit'
+  params.product = product
+
+  res.render('products/edit', params)
+}
+
+const updateProductMethod = async (req, res) => {
+  const { id } = req.params
+
+  log.info(`PUT /products/${id} route requested`)
+
+  // validate attributes
+  const { name, description, price, imageUrl } = req.body
+  if (!name || !description || !price || !imageUrl) {
+    const notification = {
+      message: 'Invalid atributes in product update.',
+      type: 'error',
+    }
+
+    redirectWithNotification(res, `/products/${id}/edit`, notification)
+  }
+  // Update Product
+  else {
+    // Product exists validation
+    const product = await getProductById(id)
+    if (!product) {
+      const notification = {
+        type: 'error',
+        message: 'Product not exists!',
+      }
+
+      redirectWithNotification(res, '/products', notification)
+    } else {
+      try {
+        await updateProduct(id, {
+          name,
+          description,
+          price: parseFloat(price),
+          imageUrl,
+        })
+
+        const notification = {
+          type: 'success',
+          message: 'Product updated!',
+        }
+
+        redirectWithNotification(res, '/products', notification)
+      } catch (err) {
+        log.error(err)
+
+        const notification = {
+          type: 'error',
+          message: 'Error in Product creation. Contact support.',
+        }
+
+        redirectWithNotification(res, `/products/${id}/edit`, notification)
+      }
+    }
+  }
 }
 
 // helper
@@ -134,6 +205,8 @@ module.exports = {
   listProductsView,
   createProductView,
   createProduct,
-  deleteProductRoute,
+  deleteProductMethod,
   productDetailstView,
+  editProductView,
+  updateProductMethod,
 }
