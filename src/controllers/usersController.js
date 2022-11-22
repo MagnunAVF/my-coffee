@@ -1,113 +1,162 @@
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 
+const {
+  defaultRenderParameters,
+  renderWithError,
+} = require('../utils/response')
 const { User } = require('../models/user')
 
 // Controller methods
-const registerView = (req, res) => {
+const registerView = async (req, res) => {
   log.info('GET /register route requested')
 
-  res.render('register', { title: 'My Coffee - Register', notification: false })
+  const params = await defaultRenderParameters(req)
+  params.title += ' - Register'
+
+  res.render('users/register', params)
 }
 
-const registerUser = (req, res) => {
+const registerUser = async (req, res) => {
   log.info('POST /register route requested')
 
   // validate attributes
   const { name, email, password, confirm } = req.body
   if (!name || !email || !password || !confirm) {
-    renderRegisterWithError(res, 'Invalid atributes in user register.')
+    await renderWithError(
+      req,
+      res,
+      'users/register',
+      'Register',
+      'Invalid attributes in user register.'
+    )
   }
   // validate password confirmation
   else if (password !== confirm) {
-    renderRegisterWithError(res, 'Password and confirmation are not the same.')
+    await renderWithError(
+      req,
+      res,
+      'users/register',
+      'Register',
+      'Password and confirmation are not the same.'
+    )
   }
   // Create user
   else {
-    User.findUnique({ where: { email } }).then((user) => {
-      // Uniq email validation
-      if (user) {
-        renderRegisterWithError(res, 'Email already used.')
-      } else {
-        try {
-          // Password Hashing
-          bcrypt.genSalt(10, (err, salt) => {
-            if (err) throw err
+    // Uniq email validation
+    const user = await User.findUnique({ where: { email } })
+    if (user) {
+      await renderWithError(
+        req,
+        res,
+        'users/register',
+        'Register',
+        'Email already used.'
+      )
+    } else {
+      try {
+        // Password Hashing
+        const salt = await bcrypt.genSalt(10)
+        const encryptedPassword = await bcrypt.hash(password, salt)
 
-            bcrypt.hash(password, salt, (err, hash) => {
-              if (err) throw err
+        // Create User
+        await User.create({
+          data: {
+            name,
+            email,
+            type: 'client',
+            password: encryptedPassword,
+          },
+        })
 
-              let encryptedPassword = hash
-
-              // Create new user with encrypted password
-              User.create({
-                data: {
-                  name,
-                  email,
-                  password: encryptedPassword,
-                  type: 'client',
-                },
-              }).then(
-                res.render('login', {
-                  title: 'My Coffee - Login',
-                  notification: {
-                    type: 'success',
-                    message: 'User created! Now you can login.',
-                  },
-                })
-              )
-            })
-          })
-        } catch (err) {
-          log.error(err)
-          renderRegisterWithError(
-            res,
-            'Error in user register. Contact support.'
-          )
+        const params = await defaultRenderParameters(req)
+        params.title += ' - Login'
+        params.notification = {
+          type: 'success',
+          message: 'User created! Now you can login.',
         }
+
+        res.render('users/login', params)
+      } catch (err) {
+        log.error(err)
+
+        await renderWithError(
+          req,
+          res,
+          'users/register',
+          'Register',
+          'Error in user register. Contact support.'
+        )
       }
-    })
+    }
   }
 }
 
-const loginView = (req, res) => {
+const loginView = async (req, res) => {
   log.info('GET /login route requested')
 
-  res.render('login', { title: 'My Coffee - Login', notification: false })
+  const params = await defaultRenderParameters(req)
+  params.title += ' - Login'
+
+  res.render('users/login', params)
 }
 
-const loginUser = (req, res) => {
+const loginUser = async (req, res) => {
+  log.info('POST /login route requested')
+
   const { email, password } = req.body
 
   // Check required fields
   if (!email || !password) {
-    const message = 'You must fill all fields'
-    log.warn(message)
-
-    res.render('login', {
-      title: 'My Coffee - Login',
-      notification: {
-        type: 'error',
-        message,
-      },
-    })
+    await renderWithError(
+      req,
+      res,
+      'users/login',
+      'Login',
+      'You must fill all fields'
+    )
   } else {
+    // Authenticate User
     passport.authenticate('local', {
-      successRedirect: '/',
+      successRedirect: '/user-home',
       failureRedirect: '/login',
       failureFlash: true,
     })(req, res)
   }
 }
 
-// Helper methods
-const renderRegisterWithError = (res, message) => {
-  log.warn(message)
+const logoutUser = (req, res, next) => {
+  log.info('GET /logout route requested')
 
-  res.render('register', {
-    title: 'My Coffee - Register',
-    notification: { type: 'error', message },
+  req.session.user = null
+  req.session.save((err) => {
+    if (err) next(err)
+
+    req.session.regenerate((err) => {
+      if (err) next(err)
+
+      res.redirect('/')
+    })
   })
+}
+
+// Redirect User based on type
+const renderUserHome = (req, res) => {
+  log.info('GET /user-home route requested')
+
+  const userType = req.user.type
+
+  switch (userType) {
+    case 'admin':
+      res.redirect('/admin')
+      break
+    case 'client':
+      res.redirect('/')
+      break
+    default:
+      res.redirect('/server-error')
+      break
+  }
 }
 
 module.exports = {
@@ -115,4 +164,6 @@ module.exports = {
   loginView,
   registerUser,
   loginUser,
+  logoutUser,
+  renderUserHome,
 }

@@ -27,7 +27,7 @@ const port = process.env.PORT || 3000
 const env = process.env.ENV || 'dev'
 
 // assets folder
-app.use(express.static(__dirname + '/public'))
+app.use('/static', express.static(path.join(__dirname, 'public')))
 
 // template engine and layouts
 app.set('view engine', 'ejs')
@@ -37,6 +37,9 @@ app.set('layout', './components/layout.ejs')
 
 // Body Parsing
 app.use(express.urlencoded({ extended: false }))
+// Allow put forms
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'))
 
 // User Session
 app.use(
@@ -51,15 +54,21 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // routes
-app.use('/', require('./routes'))
+app.use('/', require('./routes/index'))
 
 // start server
-app.listen(port, () => {
-  checkDbConnection(prisma).then((error) => {
-    if (error) {
-      process.exit(1)
-    }
+app.listen(port, async () => {
+  try {
+    await checkDbConnection(prisma)
+
+    // set inital app data
+    global.posts = []
+    global.allCategories = []
 
     log.info(`Running in ${env} mode in http://127.0.0.1:${port}`)
-  })
+  } catch (error) {
+    log.error(error)
+
+    process.exit(1)
+  }
 })

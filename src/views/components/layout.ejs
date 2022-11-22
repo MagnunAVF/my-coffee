@@ -8,8 +8,10 @@
     <title>
         <%- title %>
     </title>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://kit.fontawesome.com/b99cfe7eb2.js" crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
@@ -17,28 +19,58 @@
 <body>
     <%- include('./header.ejs') %>
 
-    <% if (notification) { %>
-        <% switch (notification.type) {
-            case 'error' : %>
-                <div class="alert alert-danger" role="alert">
-                    <%- notification.message %>
-                </div>
-                <% break;
-            case 'success' : %>
-                <div class="alert alert-success" role="alert">
-                    <%- notification.message %>
-                </div>
-                <% break;
-            case 'warning' : %>
-                <div class="alert alert-warning" role="alert">
-                    <%- notification.message %>
-                </div>
-                <% break;
-        } %>
-    <% } %>
+    <div class="w-100">
+        <% if (notification) { %>
+            <% switch (notification.type) {
+                case 'error' : %>
+                    <div class="alert alert-danger m-0" role="alert">
+                        <%- notification.message %>
+                    </div>
+                    <% break;
+                case 'success' : %>
+                    <div class="alert alert-success m-0" role="alert">
+                        <%- notification.message %>
+                    </div>
+                    <% break;
+                case 'warning' : %>
+                    <div class="alert alert-warning m-0" role="alert">
+                        <%- notification.message %>
+                    </div>
+                    <% break;
+            } %>
+        <% } %>
+    </div>
 
-    <main class="d-flex align-items-center justify-content-center">
-        <%- body %>
+    <main>
+        <% if (user) { %>
+            <div class="container-fluid h-100">
+                <div class="row justify-content-center h-100">
+                    <div class="col-2 d-flex flex-column justify-content-between align-items-center bg-secondary">
+                        <%- include('./sideMenu.ejs') %>
+                    </div>
+
+                    <div class="col d-flex flex-column justify-content-between align-items-center">
+                        <%- body %>
+
+                        <% if (showPosts) { %>
+                            <%- include('./posts.ejs') %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        <%} else { %>
+            <div class="container-fluid h-100">
+                <div class="row justify-content-center h-100">
+                    <div class="col d-flex flex-column justify-content-between align-items-center">
+                        <%- body %>
+
+                        <% if (showPosts) { %>
+                            <%- include('./posts.ejs') %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        <% } %>
     </main>
 
     <%- include('./footer.ejs') %>

@@ -1,0 +1,11 @@
+<div class="d-flex flex-wrap flex-column align-items-start justify-content-center m-0 p-3 w-100 text-white">
+    <% if (user.type === 'admin') { %>
+        <h5>Admin Actions</h5>
+        <a href="/categories" class="text-white">Product Categories</a>
+        <a href="/products" class="text-white">Products</a>
+        <a href="/posts" class="text-white">Posts</a>
+    <%} else { %>
+        <h5>Client Actions</h5>
+        <a href="/orders" class="text-white">Orders</a>
+    <% } %>
+</div>

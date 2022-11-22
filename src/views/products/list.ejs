@@ -1,0 +1,77 @@
+<div class="d-flex flex-wrap align-items-start justify-content-center h-100 w-100">
+    <script>
+        const APP_URL = window.location.origin;
+
+        function generateUrl(route, type, message) {
+            return encodeURI(APP_URL + route + '?notification=' + message + '&type=' + type)
+        }
+
+        function errorAction(data) {
+            window.location.href = generateUrl('/products', 'error', data.message);
+        }
+
+        async function deleteProduct(id) {
+            try {
+                const res = await fetch(
+                    '/products/' + id,
+                    { method: 'DELETE'}
+                );
+
+                const data = await res.json();
+                if (res.status === 200) {
+                    window.location.href = generateUrl('/products', 'success', data.message);
+                } else {
+                    errorAction(data);
+                }
+            } catch (error) {
+                errorAction({ message: "Error deleting product. Contact support for help." })
+            }
+
+        }
+    </script>
+
+    <div class="my-3">
+        <h1><u>Products</u></h1>
+
+        <a href="/products/create" type="button" role="button" class="btn btn-outline-success m-3"
+            data-toggle="tooltip" data-placement="bottom" title="create new product">
+            <i class="fa-solid fa-plus"></i>  Create
+        </a>
+
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price (R$)</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(function(product){ %>
+                    <tr>
+                        <th data-toggle="tooltip" data-placement="bottom" title=<%- product.id %>><%- product.id.substring(0,8) + '...' %></th>
+                        <td><%- product.name %></td>
+                        <td><%- product.price %></td>
+                        <td>
+                            <div class="d-flex flex-wrap">
+                                <a href=<%- "/products/" + product.id %> type="button" role="button" class="btn btn-outline-success m-1"
+                                    data-toggle="tooltip" data-placement="bottom" title="view details">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                <a href=<%- "/products/" + product.id + "/edit/"%> type="button" role="button" class="btn btn-outline-warning m-1"
+                                    data-toggle="tooltip" data-placement="bottom" title="edit">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <button class="btn btn-outline-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
+                                    onclick=<%- "deleteProduct('" + product.id + "')"%>>
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+          </table>
+    </div>
+</div>
