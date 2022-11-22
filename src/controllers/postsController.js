@@ -36,7 +36,7 @@ const createPostRoute = async (req, res) => {
       res,
       'posts/create',
       'Post Create',
-      'Invalid atributes in post creation.'
+      'Invalid attributes in post creation.'
     )
   }
   // Create Post
@@ -135,7 +135,7 @@ const updatePostMethod = async (req, res) => {
   const { title, content } = req.body
   if (!title || !content) {
     const notification = {
-      message: 'Invalid atributes in post update.',
+      message: 'Invalid attributes in post update.',
       type: 'error',
     }
 

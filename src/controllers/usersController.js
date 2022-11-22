@@ -28,7 +28,7 @@ const registerUser = async (req, res) => {
       res,
       'users/register',
       'Register',
-      'Invalid atributes in user register.'
+      'Invalid attributes in user register.'
     )
   }
   // validate password confirmation

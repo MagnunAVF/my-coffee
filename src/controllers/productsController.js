@@ -36,7 +36,7 @@ const createProductRoute = async (req, res) => {
       res,
       'products/create',
       'Product Create',
-      'Invalid atributes in product creation.'
+      'Invalid attributes in product creation.'
     )
   }
   // Create Product
@@ -138,7 +138,7 @@ const updateProductMethod = async (req, res) => {
   const { name, description, price, imageUrl } = req.body
   if (!name || !description || !price || !imageUrl) {
     const notification = {
-      message: 'Invalid atributes in product update.',
+      message: 'Invalid attributes in product update.',
       type: 'error',
     }
 
