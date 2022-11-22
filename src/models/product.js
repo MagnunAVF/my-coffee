@@ -1,21 +1,29 @@
 const Product = prisma.product
 
 const getProducts = async () => {
-  const products = await Product.findMany()
+  const products = await Product.findMany({
+    include: { categories: { include: { category: true } } },
+  })
 
   return products
 }
 
 const getProductById = async (id) => {
-  const products = await Product.findUnique({ where: { id } })
+  const product = await Product.findUnique({
+    where: { id },
+    include: { categories: { include: { category: true } } },
+  })
 
-  return products
+  return product
 }
 
 const getProductByName = async (name) => {
-  const products = await Product.findUnique({ where: { name } })
+  const product = await Product.findUnique({
+    where: { name },
+    include: { categories: { include: { category: true } } },
+  })
 
-  return products
+  return product
 }
 
 const deleteProduct = async (id) => {
@@ -24,8 +32,29 @@ const deleteProduct = async (id) => {
   })
 }
 
-const createProduct = async (data) => {
-  await Product.create({ data })
+const createProduct = async (attributes, categories) => {
+  const createArgs = {
+    data: {
+      ...attributes,
+    },
+  }
+
+  if (categories) {
+    // transform to categories connect format: [{ category: { connect: {id: 1 }}},...]
+    const connectFormatCategories = categories.reduce(
+      (acc, val) => [...acc, { category: { connect: { id: val } } }],
+      []
+    )
+    createArgs.data.categories = {
+      create: connectFormatCategories,
+    }
+
+    createArgs.include = {
+      categories: true,
+    }
+  }
+
+  await Product.create(createArgs)
 }
 
 const updateProduct = async (id, data) => {

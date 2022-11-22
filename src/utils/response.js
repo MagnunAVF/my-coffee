@@ -37,12 +37,17 @@ const defaultRenderParameters = async (req) => {
   return defaultParams
 }
 
-const renderWithError = async (req, res, page, pageTitle, message) => {
+const renderWithError = async (req, res, page, pageTitle, message, data) => {
   log.warn(message)
 
-  const params = await defaultRenderParameters(req)
+  let params = await defaultRenderParameters(req)
   params.title = `${TITLE_PREFIX} - ${pageTitle}`
   params.notification = { type: 'error', message }
+
+  // optional arg
+  if (data) {
+    params = { ...params, ...data }
+  }
 
   res.render(page, params)
 }

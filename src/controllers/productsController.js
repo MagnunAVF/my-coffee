@@ -6,6 +6,7 @@ const {
   updateProduct,
   createProduct,
 } = require('../models/product')
+const { getCategories } = require('../models/category')
 const {
   defaultRenderParameters,
   renderWithError,
@@ -19,8 +20,11 @@ const listProductsView = async (req, res) => {
 const createProductView = async (req, res) => {
   log.info('GET /products/create route requested')
 
+  const categories = await getCategories()
+
   const params = await defaultRenderParameters(req)
   params.title += ' - Product Create'
+  params.categories = categories
 
   res.render('products/create', params)
 }
@@ -29,14 +33,17 @@ const createProductRoute = async (req, res) => {
   log.info('POST /products route requested')
 
   // validate attributes
-  const { name, description, price, imageUrl } = req.body
+  const { name, description, price, imageUrl, categories } = req.body
   if (!name || !description || !price || !imageUrl) {
+    const categories = await getCategories()
+
     await renderWithError(
       req,
       res,
       'products/create',
       'Product Create',
-      'Invalid attributes in product creation.'
+      'Invalid attributes in product creation.',
+      { categories }
     )
   }
   // Create Product
@@ -44,12 +51,15 @@ const createProductRoute = async (req, res) => {
     // Uniq product validation
     const product = await getProductByName(name)
     if (product) {
+      const categories = await getCategories()
+
       await renderWithError(
         req,
         res,
         'products/create',
         'Product Create',
-        'Product already exists.'
+        'Product already exists.',
+        { categories }
       )
     } else {
       try {
@@ -60,7 +70,7 @@ const createProductRoute = async (req, res) => {
           imageUrl,
         }
 
-        await createProduct(data)
+        await createProduct(data, categories)
 
         const notification = {
           type: 'success',
@@ -69,6 +79,7 @@ const createProductRoute = async (req, res) => {
 
         await renderProductsList(req, res, notification)
       } catch (err) {
+        const categories = await getCategories()
         log.error(err)
 
         await renderWithError(
@@ -76,7 +87,8 @@ const createProductRoute = async (req, res) => {
           res,
           'products/create',
           'Product Create',
-          'Error in Product creation. Contact support.'
+          'Error in Product creation. Contact support.',
+          { categories }
         )
       }
     }

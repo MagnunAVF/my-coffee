@@ -14,6 +14,11 @@
                 
                     <div>
                         <p><strong>ID: </strong><%- product.id %></p>
+                        <% if (product.categories.length > 0) { %>
+                            <p><strong>Categorias: </strong><%- product.categories.reduce((acc, val) => [...acc, val.category.name], []) %></p>
+                        <%} else { %>
+                            <p><strong>Categories: </strong>Without categories</p>
+                        <% } %>
                         <p><strong>Created At: </strong><%- product.createdAt %></p>
                         <p><strong>Updated At: </strong><%- product.updatedAt %></p>
                         <p><strong>Description: </strong><%- product.description %></p>
