@@ -17,6 +17,9 @@ const router = express.Router()
 // Products Routes
 router.use('/products', require('./products'))
 
+// Categories Routes
+router.use('/categories', require('./categories'))
+
 // Posts Routes
 router.use('/posts', require('./posts'))
 
