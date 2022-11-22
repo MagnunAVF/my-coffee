@@ -1,3 +1,4 @@
+const { CategoryWithProductsError } = require('../errors')
 const {
   getCategories,
   deleteCategory,
@@ -74,11 +75,17 @@ const deleteCategoryMethod = async (req, res) => {
 
     res.status(200).json({ message: 'Category deleted!' })
   } catch (error) {
-    log.error(error)
+    if (error instanceof CategoryWithProductsError) {
+      res
+        .status(403)
+        .json({ message: 'Cannot delete a category with products!' })
+    } else {
+      log.error(error)
 
-    res
-      .status(500)
-      .json({ message: 'Error deleting category. Contact support.' })
+      res
+        .status(500)
+        .json({ message: 'Error deleting category. Contact support.ZZZ' })
+    }
   }
 }
 

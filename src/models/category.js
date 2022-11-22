@@ -1,3 +1,5 @@
+const { CategoryWithProductsError } = require('../errors')
+
 const Category = prisma.category
 
 const getCategories = async () => {
@@ -7,22 +9,36 @@ const getCategories = async () => {
 }
 
 const getCategoryById = async (id) => {
-  const categories = await Category.findUnique({ where: { id } })
+  const category = await Category.findUnique({ where: { id } })
 
-  return categories
+  return category
 }
 
 const getCategoryByName = async (name) => {
-  const categories = await Category.findUnique({ where: { name } })
+  const category = await Category.findUnique({ where: { name } })
 
-  return categories
+  return category
 }
 
 const deleteCategory = async (id) => {
-  // TODO: check if category is connected to products
-  await Category.delete({
+  // Check if category is connected to products
+  const category = await Category.findUnique({
     where: { id },
+    include: { products: { include: { product: true } } },
   })
+
+  // TODO: fix ghost registers in many to many product-category
+  const validProducts = category.products.filter((c) => c.productId !== null)
+
+  if (validProducts.length > 0) {
+    throw new CategoryWithProductsError(
+      'Cannot delete a category with products!'
+    )
+  } else {
+    await Category.delete({
+      where: { id },
+    })
+  }
 }
 
 const createCategory = async (data) => {

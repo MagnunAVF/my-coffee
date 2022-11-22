@@ -11,18 +11,18 @@ const getPosts = async () => {
 }
 
 const getPostById = async (id) => {
-  const posts = await Post.findUnique({
+  const post = await Post.findUnique({
     where: { id },
     include: { owner: true },
   })
 
-  return posts
+  return post
 }
 
 const getPostByTitle = async (title) => {
-  const posts = await Post.findUnique({ where: { title } })
+  const post = await Post.findUnique({ where: { title } })
 
-  return posts
+  return post
 }
 
 const deletePost = async (id) => {
