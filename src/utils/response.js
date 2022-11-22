@@ -1,16 +1,23 @@
+const { setGlobalCategories } = require('../models/category')
 const { setGlobalPosts } = require('../models/post')
 const { matchRoute } = require('./routes')
 
 const TITLE_PREFIX = 'My Coffee'
 const SHOW_POSTS_ROUTES = ['/']
+const SHOW_CATEGORIES_ROUTES = ['/products/*']
 
 const defaultRenderParameters = async (req) => {
   const route = req.originalUrl
   const showPosts = matchRoute(route, SHOW_POSTS_ROUTES)
+  const showCategories = matchRoute(route, SHOW_CATEGORIES_ROUTES)
 
   // TODO: improve posts render with pagination in component
   if (showPosts) {
     await setGlobalPosts()
+  }
+
+  if (showCategories) {
+    await setGlobalCategories()
   }
 
   const defaultParams = {
@@ -20,6 +27,7 @@ const defaultRenderParameters = async (req) => {
     showPosts,
     route,
     posts,
+    categories: allCategories,
   }
 
   // check notifications in query string

@@ -63,6 +63,7 @@ app.listen(port, async () => {
 
     // set inital app data
     global.posts = []
+    global.allCategories = []
 
     log.info(`Running in ${env} mode in http://127.0.0.1:${port}`)
   } catch (error) {

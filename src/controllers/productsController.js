@@ -6,7 +6,6 @@ const {
   updateProduct,
   createProduct,
 } = require('../models/product')
-const { getCategories } = require('../models/category')
 const {
   defaultRenderParameters,
   renderWithError,
@@ -20,11 +19,9 @@ const listProductsView = async (req, res) => {
 const createProductView = async (req, res) => {
   log.info('GET /products/create route requested')
 
-  const categories = await getCategories()
-
   const params = await defaultRenderParameters(req)
   params.title += ' - Product Create'
-  params.categories = categories
+  params.categories = allCategories
 
   res.render('products/create', params)
 }
@@ -35,15 +32,13 @@ const createProductRoute = async (req, res) => {
   // validate attributes
   const { name, description, price, imageUrl, categories } = req.body
   if (!name || !description || !price || !imageUrl) {
-    const categories = await getCategories()
-
     await renderWithError(
       req,
       res,
       'products/create',
       'Product Create',
       'Invalid attributes in product creation.',
-      { categories }
+      { categories: allCategories }
     )
   }
   // Create Product
@@ -51,15 +46,13 @@ const createProductRoute = async (req, res) => {
     // Uniq product validation
     const product = await getProductByName(name)
     if (product) {
-      const categories = await getCategories()
-
       await renderWithError(
         req,
         res,
         'products/create',
         'Product Create',
         'Product already exists.',
-        { categories }
+        { categories: allCategories }
       )
     } else {
       try {
@@ -79,7 +72,6 @@ const createProductRoute = async (req, res) => {
 
         await renderProductsList(req, res, notification)
       } catch (err) {
-        const categories = await getCategories()
         log.error(err)
 
         await renderWithError(
@@ -88,7 +80,7 @@ const createProductRoute = async (req, res) => {
           'products/create',
           'Product Create',
           'Error in Product creation. Contact support.',
-          { categories }
+          { categories: allCategories }
         )
       }
     }
@@ -137,6 +129,7 @@ const editProductView = async (req, res) => {
   const params = await defaultRenderParameters(req)
   params.title += ' - Product Edit'
   params.product = product
+  params.categories = allCategories
 
   res.render('products/edit', params)
 }
@@ -147,7 +140,7 @@ const updateProductMethod = async (req, res) => {
   log.info(`PUT /products/${id} route requested`)
 
   // validate attributes
-  const { name, description, price, imageUrl } = req.body
+  const { name, description, price, imageUrl, categories } = req.body
   if (!name || !description || !price || !imageUrl) {
     const notification = {
       message: 'Invalid attributes in product update.',
@@ -166,22 +159,26 @@ const updateProductMethod = async (req, res) => {
         message: 'Product not exists!',
       }
 
-      redirectWithNotification(res, '/products', notification)
+      redirectWithNotification(res, `/products/${id}/edit`, notification)
     } else {
       try {
-        await updateProduct(id, {
-          name,
-          description,
-          price: parseFloat(price),
-          imageUrl,
-        })
+        await updateProduct(
+          id,
+          {
+            name,
+            description,
+            price: parseFloat(price),
+            imageUrl,
+          },
+          categories
+        )
 
         const notification = {
           type: 'success',
           message: 'Product updated!',
         }
 
-        redirectWithNotification(res, '/products', notification)
+        redirectWithNotification(res, `/products/${id}/edit`, notification)
       } catch (err) {
         log.error(err)
 

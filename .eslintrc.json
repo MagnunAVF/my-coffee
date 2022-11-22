@@ -18,6 +18,7 @@
   "globals": {
     "log": true,
     "prisma": true,
-    "posts": true
+    "posts": true,
+    "allCategories": true
   }
 }

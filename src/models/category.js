@@ -2,8 +2,28 @@ const { CategoryWithProductsError } = require('../errors')
 
 const Category = prisma.category
 
+const setGlobalCategories = async () => {
+  global.allCategories = await Category.findMany()
+}
+
 const getCategories = async () => {
   const categories = await Category.findMany()
+
+  return categories
+}
+
+const getCategoriesByProductId = async (productId) => {
+  const categories = await Category.findMany({
+    where: {
+      products: {
+        some: {
+          product: {
+            id: productId,
+          },
+        },
+      },
+    },
+  })
 
   return categories
 }
@@ -60,4 +80,6 @@ module.exports = {
   deleteCategory,
   createCategory,
   updateCategory,
+  setGlobalCategories,
+  getCategoriesByProductId,
 }
