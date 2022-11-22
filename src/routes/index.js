@@ -17,6 +17,9 @@ const router = express.Router()
 // Products Routes
 router.use('/products', require('./products'))
 
+// Posts Routes
+router.use('/posts', require('./posts'))
+
 // Home
 router.get('/', homeView)
 
