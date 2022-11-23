@@ -11,6 +11,20 @@ const getProducts = async () => {
   return products
 }
 
+const getNewProducts = async () => {
+  const products = await Product.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
+    include: { categories: { include: { category: true } } },
+    take: 3,
+  })
+
+  return products
+}
+
 const getProductById = async (id) => {
   const product = await Product.findUnique({
     where: { id },
@@ -154,4 +168,5 @@ module.exports = {
   deleteProduct,
   createProduct,
   updateProduct,
+  getNewProducts,
 }
