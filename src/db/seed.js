@@ -102,6 +102,24 @@ const productsData = [
   },
 ]
 
+const shippingsData = [
+  {
+    name: 'Correios',
+    description: 'Envio para outros estados',
+    price: 23.54,
+  },
+  {
+    name: 'Motoboy',
+    description: 'Envio para localidades próximas',
+    price: 13.01,
+  },
+  {
+    name: 'Retirar',
+    description: 'Retirada do produto pelo comprador',
+    price: 0,
+  },
+]
+
 let createdCategories = {}
 
 const createUser = async (user) => {
@@ -195,6 +213,27 @@ const createProduct = async (product) => {
   }
 }
 
+const createShipping = async (shipping) => {
+  try {
+    const { name, description, price } = shipping
+
+    // Create Shipping
+    const createdShipping = await prismaClient.shipping.create({
+      data: {
+        name,
+        description,
+        price,
+      },
+    })
+
+    log.info(`* Created shipping with id: ${createdShipping.id}`)
+  } catch (error) {
+    log.error(`Error creating shipping: ${error}`)
+
+    throw error
+  }
+}
+
 const getDbData = async () => {
   log.info('\n* Getting db data ...')
 
@@ -239,6 +278,13 @@ const getDbData = async () => {
     log.info(categories.map((e) => e.category.name))
   })
 
+  log.info('\n* Shippings:')
+  const shippings = await prismaClient.shipping.findMany()
+  shippings.map((shipping) => {
+    log.info('\n** Shipping infos: ')
+    log.info(shipping)
+  })
+
   log.info('\n### Done!\n')
 }
 
@@ -264,6 +310,13 @@ const main = async () => {
     await Promise.all(
       productsData.map(async (product) => {
         await createProduct(product)
+      })
+    )
+
+    // Create shippings
+    await Promise.all(
+      shippingsData.map(async (shipping) => {
+        await createShipping(shipping)
       })
     )
   } catch (error) {

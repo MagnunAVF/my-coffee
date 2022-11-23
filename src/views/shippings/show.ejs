@@ -1,0 +1,23 @@
+<div class="d-flex flex-wrap align-items-center justify-content-center w-100 h-100">
+    <div class="container w-100 h-100 my-3">
+        <h1 class="text-left"><u>Shipping Details</u></h1>
+        <div>
+            <a href="/shippings">Go back</a>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center justify-content-center w-100 my-5">
+            <div class="card w-50">
+                <div class="card-header"><%- shipping.name %></div>
+                <div class="card-body">
+                    <div>
+                        <p><strong>ID: </strong><%- shipping.id %></p>
+                        <p><strong>Created At: </strong><%- shipping.createdAt %></p>
+                        <p><strong>Updated At: </strong><%- shipping.updatedAt %></p>
+                        <p><strong>Description: </strong><%- shipping.description %></p>
+                        <p><strong>Price: </strong>R$ <%- shipping.price %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

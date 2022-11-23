@@ -1,0 +1,49 @@
+<div class="d-flex flex-wrap align-items-start justify-content-center h-100 w-100">
+    <div class="container w-100 h-100 my-3">
+        <h1 class="text-left"><u>Edit Shipping</u></h1>
+
+        <div class="w-100">
+            <form class="form-horizontal" method="post" action=<%- '/shippings/' + shipping.id + '?_method=PUT' %>>
+                <div class="form-group">
+                    <label for="name" class="cols-sm-2 control-label">Name</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"></span>
+                            <input type="text" class="form-control" name="name" id="name"
+                                placeholder="Enter shipping name" value=<%- shipping.name %> >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description" class="cols-sm-2 control-label">Description</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"></span>
+                            <textarea type="text" class="form-control" name="description" id="description"
+                                placeholder="Enter shipping description" rows="3" ><%- shipping.description %></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price" class="cols-sm-2 control-label">Price</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"></span>
+                            <input type="number" step=0.01 class="form-control" name="price" id="price"
+                                placeholder="Enter shipping price" value=<%- "'" + shipping.price + "'"%>/>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-group ">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Save</button>
+                </div>
+                <div>
+                    <a href="/shippings">Go back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

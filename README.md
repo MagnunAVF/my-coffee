@@ -27,7 +27,13 @@ docker run -d \
 Then, init the database:
 
 ```
-npx prisma migrate dev --name init
+npx prisma migrate reset
+```
+
+If any changes are made to the database, it is necessary to run:
+
+```
+npx prisma migrate dev --name MIGRATION_NAME
 ```
 
 Finally, run localhost node server:
