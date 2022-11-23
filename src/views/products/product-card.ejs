@@ -15,9 +15,49 @@
         </div>
 
       <div class="align-self-end">
-            <a href="#" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="View details">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=<%- "#modal" + product.id %>
+                data-toggle="tooltip" data-placement="bottom" title="View details">
                 <i class="fa-solid fa-eye"></i>
-            </a>
+            </button>
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id=<%- "modal" + product.id %> tabindex="-1" role="dialog"
+                aria-labelledby=<%- "modalLabel" + product.id %> aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id=<%- "modalLabel" + product.id %>><%- product.name %></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="w-100 my-5">
+                            <img src=<%- product.imageUrl %> class="img-fluid" alt="product-image" alt="Product image" class="w-100">
+
+                            <p class="card-text"><strong>R$ <%- product.price %></strong></p>
+
+                            <div class="mb-5">
+                                <% if (product.categories.length > 0) { %>
+                                    <% product.categories.forEach(function(c){ %>
+                                        <span class="badge badge-info"><%- c.category.name %></span>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+
+                            <%- product.description %>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
             <a href="#" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart">
                 <i class="fa-solid fa-cart-plus"></i>
             </a>

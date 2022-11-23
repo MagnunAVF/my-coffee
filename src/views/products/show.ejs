@@ -15,7 +15,14 @@
                     <div>
                         <p><strong>ID: </strong><%- product.id %></p>
                         <% if (product.categories.length > 0) { %>
-                            <p><strong>Categorias: </strong><%- product.categories.reduce((acc, val) => [...acc, val.category.name], []) %></p>
+                            <p><strong>Categorias: </strong></p>
+                            <div class="mb-5">
+                                <% if (product.categories.length > 0) { %>
+                                    <% product.categories.forEach(function(c){ %>
+                                        <span class="badge badge-info"><%- c.category.name %></span>
+                                    <% }) %>
+                                <% } %>
+                            </div>
                         <%} else { %>
                             <p><strong>Categories: </strong>Without categories</p>
                         <% } %>
