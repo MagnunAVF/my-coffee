@@ -26,6 +26,9 @@ router.use('/posts', require('./posts'))
 // Shippings Routes
 router.use('/shippings', require('./shippings'))
 
+// Shopping Cart
+router.use('/cart', require('./cart'))
+
 // Home
 router.get('/', homeView)
 

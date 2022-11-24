@@ -78,9 +78,21 @@
 
     <script>
         // Cart Operations
-        // cart format = { "ID_1": 3, "ID_2": 1, ... }
+        // cart format = { "ID_1": { quantity: 1, name: 'x' }, "ID_2": { quantity: 1, name: 'y' }, ... }
 
         const COOKIE_NAME = 'cart';
+
+        const REF_URL = window.location.origin;
+
+        function generateNotificationUrl(route, type, message) {
+            return encodeURI(REF_URL + route + '?notification=' + message + '&type=' + type);
+        }
+
+        function afterCartAction(success, message, route) {
+            const type = success ? 'success' : 'error';
+
+            window.location.href = generateNotificationUrl(route, type, message);
+        }
 
         function saveCart(cart) {
             Cookies.set(COOKIE_NAME, JSON.stringify(cart));
@@ -112,12 +124,46 @@
             return cart;
         }
 
-        function addItemToCart(id, quantity) {
+        function addItemToCart(id, quantity, name) {
             const cart = getCart();
 
-            cart[id] = quantity;
+            cart[id] = { quantity, name };
 
             saveCart(cart);
+
+            afterCartAction(true, 'Product added to cart!', '/products/showcase');
+        }
+
+        function removeItemFromCart(id) {
+            const cart = getCart();
+
+            delete cart[id];
+
+            saveCart(cart);
+
+            afterCartAction(true, 'Product removed from cart!', '/cart');
+        }
+
+        function incItemQuantity(itemId) {
+            const cart = getCart();
+
+            cart[itemId].quantity += 1;
+
+            saveCart(cart);
+
+            afterCartAction(true, 'Increased product quantity', '/cart');
+        }
+
+        function decItemQuantity(itemId) {
+            const cart = getCart();
+
+            if (cart[itemId].quantity > 1) {
+                cart[itemId].quantity -= 1;
+
+                saveCart(cart);
+
+                afterCartAction(true, 'Decreased product quantity', '/cart');
+            }
         }
     </script>
 </body>

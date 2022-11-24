@@ -5,6 +5,7 @@ const expressLayouts = require('express-ejs-layouts')
 const prismaLib = require('@prisma/client')
 const passport = require('passport')
 const session = require('express-session')
+const cookieParser = require('cookie-parser')
 
 const { log } = require('./utils/log')
 const { checkDbConnection } = require('./utils/db')
@@ -25,6 +26,9 @@ loginCheck(passport)
 // env vars
 const port = process.env.PORT || 3000
 const env = process.env.ENV || 'dev'
+
+// cookies
+app.use(cookieParser())
 
 // assets folder
 app.use('/static', express.static(path.join(__dirname, 'public')))
