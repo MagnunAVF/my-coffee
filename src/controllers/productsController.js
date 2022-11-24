@@ -5,6 +5,7 @@ const {
   getProductById,
   updateProduct,
   createProduct,
+  getFilteredProducts,
 } = require('../models/product')
 const {
   defaultRenderParameters,
@@ -193,6 +194,33 @@ const updateProductMethod = async (req, res) => {
   }
 }
 
+const getProductsShowcase = async (req, res) => {
+  log.info('GET /products/showcase route requested')
+
+  const products = await getProducts()
+
+  await renderShowCase(req, res, products)
+}
+
+const getFilteredProductsShowcase = async (req, res) => {
+  log.info('POST /products/showcase route requested')
+
+  const { categories, orderBy } = req.body
+
+  // format: Attribute-Sort
+  const orderByElements = orderBy.split('-')
+  const orderByAttribute = orderByElements[0]
+  const orderBySort = orderByElements[1]
+
+  const products = await getFilteredProducts(
+    orderBySort,
+    orderByAttribute,
+    categories
+  )
+
+  await renderShowCase(req, res, products)
+}
+
 // helper
 const renderProductsList = async (req, res, notification) => {
   log.info('GET /products route requested')
@@ -210,6 +238,17 @@ const renderProductsList = async (req, res, notification) => {
   res.render('products/list', params)
 }
 
+const renderShowCase = async (req, res, products, notification) => {
+  const params = await defaultRenderParameters(req)
+  params.title += ' - Products Showcase'
+  params.products = products
+  params.categories = allCategories
+
+  if (!params.notification) params.notification = notification
+
+  res.render('products/showcase', params)
+}
+
 module.exports = {
   listProductsView,
   createProductView,
@@ -218,4 +257,6 @@ module.exports = {
   productDetailstView,
   editProductView,
   updateProductMethod,
+  getProductsShowcase,
+  getFilteredProductsShowcase,
 }

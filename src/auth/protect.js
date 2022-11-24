@@ -8,14 +8,29 @@ const ADMIN_ROUTES = [
   '/categories/*',
   '/shippings/',
 ]
+// exception routes (not admin)
+const PUBLIC_ROUTES = ['/products/showcase']
 
 const protectRoute = async (req, res, next) => {
+  const route = req.originalUrl
+
   // Check if user is authenticated
   if (!req.isAuthenticated()) {
-    await renderWithError(req, res, 'users/login', 'Login', 'Login to continue')
+    const isAPublicRoute = matchRoute(route, PUBLIC_ROUTES)
+
+    if (isAPublicRoute) {
+      return next()
+    } else {
+      await renderWithError(
+        req,
+        res,
+        'users/login',
+        'Login',
+        'Login to continue'
+      )
+    }
   } else {
     // Check admin route
-    const route = req.originalUrl
     const isAdminRoute = matchRoute(route, ADMIN_ROUTES)
 
     if (isAdminRoute) {
