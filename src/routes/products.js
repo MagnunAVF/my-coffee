@@ -8,10 +8,16 @@ const {
   productDetailstView,
   editProductView,
   updateProductMethod,
+  getProductsShowcase,
+  getFilteredProductsShowcase,
 } = require('../controllers/productsController')
 const { protectRoute } = require('../auth/protect')
 
 const router = express.Router()
+
+// Public routes
+router.get('/showcase', getProductsShowcase)
+router.post('/showcase', getFilteredProductsShowcase)
 
 // Admin Products CRUD
 router.get('/', protectRoute, listProductsView)

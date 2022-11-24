@@ -11,6 +11,61 @@ const getProducts = async () => {
   return products
 }
 
+const getNewProducts = async () => {
+  const products = await Product.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
+    include: { categories: { include: { category: true } } },
+    take: 3,
+  })
+
+  return products
+}
+
+const getFilteredProducts = async (
+  orderBySort,
+  orderByAttribute,
+  categoriesIds
+) => {
+  const findArgs = {
+    include: { categories: { include: { category: true } } },
+  }
+
+  if (orderByAttribute !== 'none') {
+    findArgs.orderBy = [
+      {
+        [orderByAttribute]: orderBySort,
+      },
+    ]
+  }
+
+  if (categoriesIds) {
+    let categoriesIdsList = categoriesIds
+    if (typeof categoriesIds === 'string') {
+      categoriesIdsList = [categoriesIds]
+    }
+
+    findArgs.where = {
+      categories: {
+        some: {
+          category: {
+            id: {
+              in: categoriesIdsList,
+            },
+          },
+        },
+      },
+    }
+  }
+
+  const products = await Product.findMany(findArgs)
+
+  return products
+}
+
 const getProductById = async (id) => {
   const product = await Product.findUnique({
     where: { id },
@@ -43,8 +98,13 @@ const createProduct = async (attributes, categories) => {
   }
 
   if (categories) {
+    let categoriesIdsList = categories
+    if (typeof categories === 'string') {
+      categoriesIdsList = [categories]
+    }
+
     // transform to categories connect format: [{ category: { connect: {id: 1 }}},...]
-    const connectFormatCategories = categories.reduce(
+    const connectFormatCategories = categoriesIdsList.reduce(
       (acc, val) => [...acc, { category: { connect: { id: val } } }],
       []
     )
@@ -154,4 +214,6 @@ module.exports = {
   deleteProduct,
   createProduct,
   updateProduct,
+  getNewProducts,
+  getFilteredProducts,
 }
