@@ -14,6 +14,7 @@
     <script src="https://kit.fontawesome.com/b99cfe7eb2.js" crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 
 <body>
@@ -74,6 +75,106 @@
     </main>
 
     <%- include('./footer.ejs') %>
+
+    <script>
+        // Cart Operations
+        // cart format = { "ID_1": { quantity: 1, name: 'x' }, "ID_2": { quantity: 1, name: 'y' }, ... }
+
+        const COOKIE_NAME = 'cart';
+
+        const REF_URL = window.location.origin;
+
+        function generateNotificationUrl(route, type, message) {
+            return encodeURI(REF_URL + route + '?notification=' + message + '&type=' + type);
+        }
+
+        function afterCartAction(success, message, route) {
+            const type = success ? 'success' : 'error';
+
+            window.location.href = generateNotificationUrl(route, type, message);
+        }
+
+        function saveCart(cart) {
+            Cookies.set(COOKIE_NAME, JSON.stringify(cart));
+        }
+
+        function createNewCart() {
+            const cart = {};
+
+            saveCart(cart);
+
+            return cart;
+        }
+
+        function getCart() {
+            const cartCookie = Cookies.get(COOKIE_NAME);
+            let cart;
+
+            // validations
+            try {
+                cart = JSON.parse(cartCookie);
+
+                if (typeof cart === 'number' || typeof cart === 'boolean') {
+                    throw Error;
+                }
+            } catch (error) {
+                return createNewCart();
+            }
+
+            return cart;
+        }
+
+        function addItemToCart(id, quantity, name) {
+            const cart = getCart();
+
+            cart[id] = { quantity, name };
+
+            saveCart(cart);
+
+            afterCartAction(true, 'Product added to cart!', '/products/showcase');
+        }
+
+        function removeItemFromCart(id) {
+            const cart = getCart();
+
+            delete cart[id];
+
+            saveCart(cart);
+
+            afterCartAction(true, 'Product removed from cart!', '/cart');
+        }
+
+        function incItemQuantity(itemId) {
+            const cart = getCart();
+
+            cart[itemId].quantity += 1;
+
+            saveCart(cart);
+
+            afterCartAction(true, 'Increased product quantity', '/cart');
+        }
+
+        function decItemQuantity(itemId) {
+            const cart = getCart();
+
+            if (cart[itemId].quantity > 1) {
+                cart[itemId].quantity -= 1;
+
+                saveCart(cart);
+
+                afterCartAction(true, 'Decreased product quantity', '/cart');
+            }
+        }
+
+        function goToCheckout() {
+            // save selected shipping
+            const selectedShippingId = $('#selectShipping').val();
+            Cookies.set('shipping', selectedShippingId);
+
+            // go to checkout page
+            window.location.href = encodeURI(REF_URL + '/payment');
+        }
+    </script>
 </body>
 
 </html>

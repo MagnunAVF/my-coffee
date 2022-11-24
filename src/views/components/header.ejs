@@ -3,14 +3,26 @@
         <img src="/static/images/coffee.svg" width="30" height="30" alt="My Coffee"> My Coffee
     </a>
 
-    <% if (user) { %>
-        <div class="d-flex align-items-center justify-content-between px-3">
-            <p class="my-0 mx-2"><%- user.name %></p>
-            <a href="/logout">Logout</a>
-        </div>
-    <%} else { %>
-        <div>
-            <a href="/login">Login</a>
-        </div>
-    <% } %>
+    <div class="d-flex align-items-center justify-content-center mx-2">
+        <% if (user && user.type !== 'admin') { %>
+            <a href="/cart" class="mx-2">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+        <%} else { %>
+            <a href="/cart" class="mx-2">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+        <% } %>
+
+        <% if (user) { %>
+            <div class="d-flex align-items-center justify-content-between px-3 mx-2">
+                <p class="my-0 mx-2"><%- user.name %></p>
+                <a href="/logout">Logout</a>
+            </div>
+        <%} else { %>
+            <div class="mx-2">
+                <a href="/login">Login</a>
+            </div>
+        <% } %>
+    </div>
 </nav>
