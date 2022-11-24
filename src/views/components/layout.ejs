@@ -165,6 +165,15 @@
                 afterCartAction(true, 'Decreased product quantity', '/cart');
             }
         }
+
+        function goToCheckout() {
+            // save selected shipping
+            const selectedShippingId = $('#selectShipping').val();
+            Cookies.set('shipping', selectedShippingId);
+
+            // go to checkout page
+            window.location.href = encodeURI(REF_URL + '/payment');
+        }
     </script>
 </body>
 
