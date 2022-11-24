@@ -14,6 +14,7 @@
     <script src="https://kit.fontawesome.com/b99cfe7eb2.js" crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 
 <body>
@@ -74,6 +75,51 @@
     </main>
 
     <%- include('./footer.ejs') %>
+
+    <script>
+        // Cart Operations
+        // cart format = { "ID_1": 3, "ID_2": 1, ... }
+
+        const COOKIE_NAME = 'cart';
+
+        function saveCart(cart) {
+            Cookies.set(COOKIE_NAME, JSON.stringify(cart));
+        }
+
+        function createNewCart() {
+            const cart = {};
+
+            saveCart(cart);
+
+            return cart;
+        }
+
+        function getCart() {
+            const cartCookie = Cookies.get(COOKIE_NAME);
+            let cart;
+
+            // validations
+            try {
+                cart = JSON.parse(cartCookie);
+
+                if (typeof cart === 'number' || typeof cart === 'boolean') {
+                    throw Error;
+                }
+            } catch (error) {
+                return createNewCart();
+            }
+
+            return cart;
+        }
+
+        function addItemToCart(id, quantity) {
+            const cart = getCart();
+
+            cart[id] = quantity;
+
+            saveCart(cart);
+        }
+    </script>
 </body>
 
 </html>

@@ -49,18 +49,20 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="#" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart">
-                            <i class="fa-solid fa-cart-plus"></i>
-                        </a>
+                        <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart"
+                            onClick="addItemToCart('<%- product.id %>', 1)" >
+                                <i class="fa-solid fa-cart-plus"></i>
+                        </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
                 </div>
             </div>
 
-            <a href="#" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart">
+            <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart"
+                onClick="addItemToCart('<%- product.id %>', 1)" >
                 <i class="fa-solid fa-cart-plus"></i>
-            </a>
+            </button>
       </div>
     </div>
 </div>
