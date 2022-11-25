@@ -54,7 +54,7 @@ const createOrder = async (userId, shippingId, products) => {
       .quantity
     total += product.price * productQuantity
   })
-  total = total.toFixed(2)
+  total = parseFloat(total.toFixed(2))
 
   const creadtedOrder = await Order.create({
     data: {

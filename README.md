@@ -27,7 +27,7 @@ docker run -d \
 Then, init the database:
 
 ```
-npx prisma migrate reset
+npx prisma migrate reset --force
 ```
 
 If any changes are made to the database, it is necessary to run:
