@@ -75,6 +75,14 @@ const getProductById = async (id) => {
   return product
 }
 
+const getProductByIdsList = async (idsList) => {
+  const product = await Product.findMany({
+    where: { id: { in: idsList } },
+  })
+
+  return product
+}
+
 const getProductByName = async (name) => {
   const product = await Product.findUnique({
     where: { name },
@@ -216,4 +224,5 @@ module.exports = {
   updateProduct,
   getNewProducts,
   getFilteredProducts,
+  getProductByIdsList,
 }

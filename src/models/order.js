@@ -1,3 +1,6 @@
+const { getProductByIdsList } = require('./product')
+const { getShippingById } = require('./shipping')
+
 const Order = prisma.order
 const ProductQuantity = prisma.ProductQuantity
 
@@ -12,6 +15,7 @@ const getOrdersByUser = async (userId) => {
       products: { include: { product: true } },
       shipping: true,
       owner: true,
+      productQuantities: true,
     },
   })
 
@@ -25,6 +29,7 @@ const getOrderById = async (id) => {
       products: { include: { product: true } },
       shipping: true,
       owner: true,
+      productQuantities: true,
     },
   })
 
@@ -38,11 +43,24 @@ const createOrder = async (userId, shippingId, products) => {
     (acc, val) => [...acc, { product: { connect: { id: val.id } } }],
     []
   )
+  // calculate total
+  let total = 0
+  const shipping = await getShippingById(shippingId)
+  total += shipping.price
+
+  const productsList = await getProductByIdsList(products.map((e) => e.id))
+  productsList.forEach((product) => {
+    let productQuantity = products.filter((p) => p.id === product.id)[0]
+      .quantity
+    total += product.price * productQuantity
+  })
+  total = total.toFixed(2)
 
   const creadtedOrder = await Order.create({
     data: {
       shippingStatus: 'NOT SENDED',
       paymentStatus: 'PAID',
+      total,
       shipping: {
         connect: {
           id: shippingId,

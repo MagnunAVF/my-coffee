@@ -80,6 +80,7 @@ model Order {
   paymentStatus      String
   shippingStatus     String
   productQuantities  ProductQuantity[]
+  total              Float
 }
 
 model ProductOrders {

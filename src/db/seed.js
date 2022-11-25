@@ -128,8 +128,8 @@ const addressesData = [
 ]
 
 let createdCategories = {}
-let createdShippingsIds = []
-let createdProductsIds = []
+let createdShippings = []
+let createdProducts = []
 let createdUserId = ''
 
 const createUser = async (user) => {
@@ -227,7 +227,7 @@ const createProduct = async (product) => {
       },
     })
 
-    createdProductsIds.push(createdProduct.id)
+    createdProducts.push({ id: createdProduct.id, price: createdProduct.price })
 
     log.info(`* Created product with id: ${createdProduct.id}`)
   } catch (error) {
@@ -250,7 +250,10 @@ const createShipping = async (shipping) => {
       },
     })
 
-    createdShippingsIds.push(createdShipping.id)
+    createdShippings.push({
+      id: createdShipping.id,
+      price: createdShipping.price,
+    })
 
     log.info(`* Created shipping with id: ${createdShipping.id}`)
   } catch (error) {
@@ -261,13 +264,20 @@ const createShipping = async (shipping) => {
 }
 
 const createOrder = async () => {
+  let quantity = 2
+  let total =
+    createdProducts[0].price * quantity +
+    createdProducts[1].price * quantity +
+    createdShippings[0].price
+
   const createdOrder = await prismaClient.order.create({
     data: {
       shippingStatus: 'NOT SENDED',
       paymentStatus: 'PAID',
+      total,
       shipping: {
         connect: {
-          id: createdShippingsIds[0],
+          id: createdShippings[0].id,
         },
       },
       owner: {
@@ -277,8 +287,8 @@ const createOrder = async () => {
       },
       products: {
         create: [
-          { product: { connect: { id: createdProductsIds[0] } } },
-          { product: { connect: { id: createdProductsIds[1] } } },
+          { product: { connect: { id: createdProducts[0].id } } },
+          { product: { connect: { id: createdProducts[1].id } } },
         ],
       },
     },
@@ -291,11 +301,11 @@ const createOrder = async () => {
 
   // add quantity to products
   await Promise.all(
-    [createdProductsIds[0], createdProductsIds[1]].map(async (productId) => {
+    [createdProducts[0].id, createdProducts[1].id].map(async (productId) => {
       await prismaClient.ProductQuantity.create({
         data: {
           productId,
-          quantity: 2,
+          quantity,
           order: {
             connect: {
               id: createdOrder.id,
