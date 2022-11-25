@@ -1,0 +1,49 @@
+<div class="d-flex flex-wrap align-items-start justify-content-center h-100 w-100">
+    <div class="my-3">
+        <h1><u>Address</u></h1>
+
+        <div class="w-100">
+            <% if (address) { %>
+                <form class="form-horizontal" method="post" action=<%- '/address/' + address.id + '?_method=PUT' %>>
+            <%} else { %>
+                <form class="form-horizontal" method="post" action="/address">
+            <% } %>
+                <div class="form-group">
+                    <label for="content" class="cols-sm-2 control-label">Full Address</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"></span>
+                            <input type="text" class="form-control" name="content" id="content"
+                                placeholder="Enter the full address" 
+                                <% if (address) { %>
+                                    <%- 'value="' + address.content + '"' %>
+                                <% } %>
+                                />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="zipCode" class="cols-sm-2 control-label">Zip Code (CEP)</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"></span>
+                            <input type="text" class="form-control" name="zipCode" id="zipCode"
+                                placeholder="Enter the zip code"
+                                <% if (address) { %>
+                                    <%- 'value="' + address.zipCode + '"' %>
+                                <% } %>
+                                />
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-group ">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Save</button>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+</div>
