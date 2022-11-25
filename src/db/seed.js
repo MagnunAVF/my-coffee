@@ -120,6 +120,13 @@ const shippingsData = [
   },
 ]
 
+const addressesData = [
+  {
+    content: 'Rua Independência 176, centro, Porto Alegre - RS',
+    zipCode: '90040300',
+  },
+]
+
 let createdCategories = {}
 
 const createUser = async (user) => {
@@ -140,6 +147,14 @@ const createUser = async (user) => {
       createParams.include = { posts: true }
       createParams.data.posts = {
         create: postsData,
+      }
+    }
+
+    // Add user address
+    if (user.name === 'Nilu') {
+      createParams.include = { addresses: true }
+      createParams.data.addresses = {
+        create: addressesData,
       }
     }
 
@@ -253,6 +268,20 @@ const getDbData = async () => {
     log.info('\n** Post infos:')
     log.info(post)
     log.info('*** Post Owner:')
+    log.info(`name: ${name} ; user type: ${type}`)
+  })
+
+  log.info('\n* Addresses:')
+  const addresses = await prismaClient.address.findMany({
+    include: { owner: true },
+  })
+  addresses.map((address) => {
+    const { name, type } = address.owner
+    delete address['owner']
+
+    log.info('\n** Address infos:')
+    log.info(address)
+    log.info('*** Address Owner:')
     log.info(`name: ${name} ; user type: ${type}`)
   })
 
