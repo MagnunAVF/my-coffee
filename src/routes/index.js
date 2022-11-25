@@ -26,8 +26,14 @@ router.use('/posts', require('./posts'))
 // Shippings Routes
 router.use('/shippings', require('./shippings'))
 
-// Shopping Cart
+// Shopping Routes
 router.use('/cart', require('./cart'))
+
+// Addresses Routes
+router.use('/address', require('./address'))
+
+// Orders Routes
+router.use('/orders', require('./orders'))
 
 // Home
 router.get('/', homeView)

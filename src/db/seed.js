@@ -120,7 +120,17 @@ const shippingsData = [
   },
 ]
 
+const addressesData = [
+  {
+    content: 'Rua Independência 176, centro, Porto Alegre - RS',
+    zipCode: '90040300',
+  },
+]
+
 let createdCategories = {}
+let createdShippings = []
+let createdProducts = []
+let createdUserId = ''
 
 const createUser = async (user) => {
   try {
@@ -143,8 +153,20 @@ const createUser = async (user) => {
       }
     }
 
+    // Add user address
+    if (user.name === 'Nilu') {
+      createParams.include = { addresses: true }
+      createParams.data.addresses = {
+        create: addressesData,
+      }
+    }
+
     // Create User
     const createdUser = await prismaClient.user.create(createParams)
+
+    if (user.name === 'Nilu') {
+      createdUserId = createdUser.id
+    }
 
     log.info(`* Created ${user.type} user with id: ${createdUser.id}`)
     if (user.type === 'admin') log.info(' ** Also created admin user posts')
@@ -205,6 +227,8 @@ const createProduct = async (product) => {
       },
     })
 
+    createdProducts.push({ id: createdProduct.id, price: createdProduct.price })
+
     log.info(`* Created product with id: ${createdProduct.id}`)
   } catch (error) {
     log.error(`Error creating product: ${error}`)
@@ -226,12 +250,74 @@ const createShipping = async (shipping) => {
       },
     })
 
+    createdShippings.push({
+      id: createdShipping.id,
+      price: createdShipping.price,
+    })
+
     log.info(`* Created shipping with id: ${createdShipping.id}`)
   } catch (error) {
     log.error(`Error creating shipping: ${error}`)
 
     throw error
   }
+}
+
+const createOrder = async () => {
+  let quantity = 2
+  let total =
+    createdProducts[0].price * quantity +
+    createdProducts[1].price * quantity +
+    createdShippings[0].price
+
+  const createdOrder = await prismaClient.order.create({
+    data: {
+      shippingStatus: 'NOT SENDED',
+      paymentStatus: 'PAID',
+      total,
+      shipping: {
+        connect: {
+          id: createdShippings[0].id,
+        },
+      },
+      owner: {
+        connect: {
+          id: createdUserId,
+        },
+      },
+      products: {
+        create: [
+          { product: { connect: { id: createdProducts[0].id } } },
+          { product: { connect: { id: createdProducts[1].id } } },
+        ],
+      },
+    },
+    include: {
+      products: true,
+      shipping: true,
+      owner: true,
+    },
+  })
+
+  // add quantity to products
+  await Promise.all(
+    [createdProducts[0].id, createdProducts[1].id].map(async (productId) => {
+      await prismaClient.ProductQuantity.create({
+        data: {
+          productId,
+          quantity,
+          order: {
+            connect: {
+              id: createdOrder.id,
+            },
+          },
+        },
+        include: {
+          order: true,
+        },
+      })
+    })
+  )
 }
 
 const getDbData = async () => {
@@ -253,6 +339,20 @@ const getDbData = async () => {
     log.info('\n** Post infos:')
     log.info(post)
     log.info('*** Post Owner:')
+    log.info(`name: ${name} ; user type: ${type}`)
+  })
+
+  log.info('\n* Addresses:')
+  const addresses = await prismaClient.address.findMany({
+    include: { owner: true },
+  })
+  addresses.map((address) => {
+    const { name, type } = address.owner
+    delete address['owner']
+
+    log.info('\n** Address infos:')
+    log.info(address)
+    log.info('*** Address Owner:')
     log.info(`name: ${name} ; user type: ${type}`)
   })
 
@@ -284,6 +384,29 @@ const getDbData = async () => {
     log.info('\n** Shipping infos: ')
     log.info(shipping)
   })
+
+  log.info('\n* Orders:')
+  const orders = await prismaClient.order.findMany({
+    include: {
+      products: { include: { product: true } },
+      shipping: true,
+      owner: true,
+    },
+  })
+  orders.map((order) => {
+    log.info('\n** Order infos: ')
+    log.info(order)
+    log.info('*** Order shipping: ')
+    log.info(order.shipping.name)
+    log.info('*** Order user: ')
+    log.info(order.owner.name)
+    log.info('*** Order products: ')
+    log.info(order.products.map((e) => e.product.name))
+  })
+
+  log.info('** Products quantities: ')
+  const productQuantity = await prismaClient.ProductQuantity.findMany()
+  log.info(productQuantity)
 
   log.info('\n### Done!\n')
 }
@@ -319,8 +442,12 @@ const main = async () => {
         await createShipping(shipping)
       })
     )
+
+    // Create Order
+    await createOrder()
   } catch (error) {
     log.error('\n### Error seeding data!')
+    log.error(error)
     process.exit(1)
   }
 

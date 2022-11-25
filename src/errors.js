@@ -5,6 +5,30 @@ class CategoryWithProductsError extends Error {
   }
 }
 
+class InvalidShippingError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'InvalidShippingError'
+  }
+}
+
+class InvalidCartError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'InvalidCartError'
+  }
+}
+
+class CreditCardError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'CreditCardError'
+  }
+}
+
 module.exports = {
   CategoryWithProductsError,
+  InvalidShippingError,
+  InvalidCartError,
+  CreditCardError,
 }

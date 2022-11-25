@@ -50,7 +50,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart"
-                            onClick="addItemToCart('<%- product.id %>', 1, '<%- product.name %>')" >
+                            onClick="addItemToCart('<%- product.id %>', 1, '<%- product.name %>', '<%- product.price %>')" >
                                 <i class="fa-solid fa-cart-plus"></i>
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -60,7 +60,7 @@
             </div>
 
             <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart"
-                onClick="addItemToCart('<%- product.id %>', 1, '<%- product.name %>')" >
+                onClick="addItemToCart('<%- product.id %>', 1, '<%- product.name %>', '<%- product.price %>')" >
                 <i class="fa-solid fa-cart-plus"></i>
             </button>
       </div>

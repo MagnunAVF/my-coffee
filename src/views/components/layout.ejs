@@ -77,13 +77,25 @@
     <%- include('./footer.ejs') %>
 
     <script>
-        // Cart Operations
-        // cart format = { "ID_1": { quantity: 1, name: 'x' }, "ID_2": { quantity: 1, name: 'y' }, ... }
-
-        const COOKIE_NAME = 'cart';
-
         const REF_URL = window.location.origin;
+        const CART_COOKIE_NAME = 'cart';
+        const SHIPPING_COOKIE_NAME = 'shipping';
 
+        // After page Load events
+        function afterPageLoad() {
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const params = Object.fromEntries(urlSearchParams.entries());
+
+            // clear cart after success payment
+            if (params.resetCart) {
+                Cookies.remove(CART_COOKIE_NAME)
+                Cookies.remove(SHIPPING_COOKIE_NAME)
+            }
+        }
+        document.onload = afterPageLoad();
+
+        // Cart Operations
+        // cart format = { "ID_1": { quantity: 1, name: 'x', price: '1.22' }, ... }
         function generateNotificationUrl(route, type, message) {
             return encodeURI(REF_URL + route + '?notification=' + message + '&type=' + type);
         }
@@ -95,7 +107,7 @@
         }
 
         function saveCart(cart) {
-            Cookies.set(COOKIE_NAME, JSON.stringify(cart));
+            Cookies.set(CART_COOKIE_NAME, JSON.stringify(cart));
         }
 
         function createNewCart() {
@@ -107,7 +119,7 @@
         }
 
         function getCart() {
-            const cartCookie = Cookies.get(COOKIE_NAME);
+            const cartCookie = Cookies.get(CART_COOKIE_NAME);
             let cart;
 
             // validations
@@ -124,10 +136,10 @@
             return cart;
         }
 
-        function addItemToCart(id, quantity, name) {
+        function addItemToCart(id, quantity, name, price) {
             const cart = getCart();
 
-            cart[id] = { quantity, name };
+            cart[id] = { quantity, name, price };
 
             saveCart(cart);
 
@@ -169,10 +181,10 @@
         function goToCheckout() {
             // save selected shipping
             const selectedShippingId = $('#selectShipping').val();
-            Cookies.set('shipping', selectedShippingId);
+            Cookies.set(SHIPPING_COOKIE_NAME, selectedShippingId);
 
             // go to checkout page
-            window.location.href = encodeURI(REF_URL + '/payment');
+            window.location.href = encodeURI(REF_URL + '/orders/create');
         }
     </script>
 </body>

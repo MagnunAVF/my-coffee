@@ -16,6 +16,18 @@ model User {
   type       String
   password   String
   posts      Post[]
+  addresses  Address[]
+  orders     Order[]
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  content     String
+  zipCode     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
 }
 
 model Post {
@@ -37,6 +49,7 @@ model Product {
   price       Float
   imageUrl    String
   categories  ProductCategories[]
+  orders      ProductOrders[]
 }
 
 model Category {
@@ -55,6 +68,39 @@ model ProductCategories {
   categoryId  String?
 }
 
+model Order {
+  id                 String               @id @default(uuid())
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  products           ProductOrders[]
+  shipping           Shipping             @relation(fields: [shippingId], references: [id])
+  shippingId         String
+  owner              User                 @relation(fields: [ownerId], references: [id])
+  ownerId            String
+  paymentStatus      String
+  shippingStatus     String
+  productQuantities  ProductQuantity[]
+  total              Float
+}
+
+model ProductOrders {
+  id          String    @id @default(uuid())
+  product     Product?  @relation(fields: [productId], references: [id])
+  order       Order?    @relation(fields: [orderId], references: [id])
+  productId   String?
+  orderId     String?
+}
+
+model ProductQuantity {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  productId   String
+  quantity    Int
+  order       Order     @relation(fields: [orderId], references: [id])
+  orderId     String
+}
+
 model Shipping {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
@@ -62,4 +108,5 @@ model Shipping {
   name        String   @unique
   description String
   price       Float
+  orders      Order[]
 }
