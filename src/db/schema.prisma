@@ -28,6 +28,7 @@ model Address {
   zipCode     String
   owner       User     @relation(fields: [ownerId], references: [id])
   ownerId     String
+  canDelete   Boolean  @default(true)
 }
 
 model Post {
@@ -38,6 +39,7 @@ model Post {
   content     String
   owner       User     @relation(fields: [ownerId], references: [id])
   ownerId     String
+  canDelete   Boolean  @default(true)
 }
 
 model Product {
@@ -50,6 +52,7 @@ model Product {
   imageUrl    String
   categories  ProductCategories[]
   orders      ProductOrders[]
+  canDelete   Boolean  @default(true)
 }
 
 model Category {
@@ -58,6 +61,7 @@ model Category {
   updatedAt   DateTime @updatedAt
   name        String   @unique
   products    ProductCategories[]
+  canDelete   Boolean  @default(true)
 }
 
 model ProductCategories {
@@ -81,6 +85,7 @@ model Order {
   shippingStatus     String
   productQuantities  ProductQuantity[]
   total              Float
+  canDelete          Boolean  @default(false)
 }
 
 model ProductOrders {
@@ -109,4 +114,5 @@ model Shipping {
   description String
   price       Float
   orders      Order[]
+  canDelete   Boolean  @default(true)
 }
