@@ -33,7 +33,7 @@
 
                 <div class="p-1 mt-3"><strong>Order Total</strong></div>
                 <% let total = Object.keys(cart).reduce((acc, val) => { acc += (parseFloat(cart[val].price) * parseInt(cart[val].quantity)); return acc }, 0.0) + selectedShipping.price; %>
-                <div class="p-1 mb-3">R$ <%- total %></div>
+                <div class="p-1 mb-3">R$ <%- total.toFixed(2) %></div>
             </div>
             
             <div class="d-flex flex-wrap flex-column align-items-center justify-content-center bg-white w-100">

@@ -3,7 +3,7 @@ const {
   InvalidCartError,
   CreditCardError,
 } = require('../errors')
-const { createOrder } = require('../models/order')
+const { createOrder, getOrdersByUser } = require('../models/order')
 const { getNewProducts } = require('../models/product')
 const { getShippings } = require('../models/shipping')
 const { validateCreditCard } = require('../utils/creditCard')
@@ -17,7 +17,15 @@ const createOrderView = async (req, res) => {
 }
 
 const listUserOrdersView = async (req, res) => {
-  log.info(req, res)
+  const userId = req.user.id
+
+  const orders = await getOrdersByUser(userId)
+
+  const params = await defaultRenderParameters(req)
+  params.title += ' - User Orders'
+  params.orders = orders
+
+  res.render('orders/user-list', params)
 }
 
 const createUserOrder = async (req, res) => {
@@ -75,6 +83,8 @@ const createUserOrder = async (req, res) => {
 }
 
 const listOrdersView = async (req, res) => {
+  log.info('GET /orders/user route requested')
+
   log.info(req, res)
 }
 
