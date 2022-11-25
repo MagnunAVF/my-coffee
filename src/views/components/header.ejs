@@ -1,28 +1,43 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light d-flex align-items-center justify-content-between">
-    <a class="navbar-brand" href="/">
+<nav class="navbar navbar-expand-lg navbar-light bg-light-brown d-flex align-items-center justify-content-between">
+    <a class="navbar-brand other-link" href="/" data-toggle="tooltip" data-placement="bottom" title="Go to Home page">
         <img src="/static/images/coffee.svg" width="30" height="30" alt="My Coffee"> My Coffee
     </a>
 
     <div class="d-flex align-items-center justify-content-center mx-2">
         <% if (user && user.type !== 'admin') { %>
-            <a href="/cart" class="mx-2">
+            <a href="/cart" class="mx-2 other-link" data-toggle="tooltip" data-placement="bottom" title="Go to My Cart">
                 <i class="fa-solid fa-cart-shopping"></i>
             </a>
         <%} else { %>
-            <a href="/cart" class="mx-2">
+            <a href="/cart" class="mx-2 other-link" data-toggle="tooltip" data-placement="bottom" title="Go to My Cart">
                 <i class="fa-solid fa-cart-shopping"></i>
             </a>
         <% } %>
 
         <% if (user) { %>
-            <div class="d-flex align-items-center justify-content-between px-3 mx-2">
-                <p class="my-0 mx-2"><%- user.name %></p>
-                <a href="/logout">Logout</a>
+            <div class="d-flex align-items-center justify-content-between px-3 mx-2 other-link">
+                <p class="my-0 mx-2 other-link"><%- user.name %></p>
+                <a href="/logout" style="color: #fff!important">Logout</a>
             </div>
         <%} else { %>
             <div class="mx-2">
-                <a href="/login">Login</a>
+                <a href="/login" style="color: #fff!important">Login</a>
             </div>
         <% } %>
     </div>
 </nav>
+
+<% if (user) { %>
+    <nav class="navbar navbar-expand-lg navbar-light bg-low-light-brown d-flex align-items-center justify-content-around">
+        <% if (user.type === 'admin') { %>
+            <a href="/admin" style="color: #fff!important">Admin Home</a>
+            <a href="/categories" style="color: #fff!important">Product Categories</a>
+            <a href="/products" style="color: #fff!important">Products</a>
+            <a href="/posts" style="color: #fff!important">Posts</a>
+            <a href="/shippings" style="color: #fff!important">Shippings</a>
+        <%} else { %>
+            <a href="/orders/user" style="color: #fff!important">Orders</a>
+            <a href="/address" style="color: #fff!important">My Address</a>
+        <% } %>
+    </nav>
+<% } %>

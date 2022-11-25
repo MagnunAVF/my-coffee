@@ -43,7 +43,7 @@
                             <input type="text" class="form-control" name="name" id="name"
                                 placeholder="Enter category name" />
                             <div class="input-group-append">
-                                <button class="btn btn-outline-success" type="submit"
+                                <button class="btn btn-success" type="submit"
                                     data-toggle="tooltip" data-placement="bottom" title="create">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
@@ -74,7 +74,7 @@
                         <td><%- category.updatedAt %></td>
                         <td>
                             <div class="d-flex flex-wrap">
-                                <button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target=<%- "#modal" + category.id %> >
+                                <button type="button" style="color: #fff!important" class="btn btn-warning m-1" data-toggle="modal" data-target=<%- "#modal" + category.id %> >
                                     <i class="fa-solid fa-pen"></i>
                                 </button>
 
@@ -119,7 +119,7 @@
                                 </div>
 
                                 <% if (category.canDelete) { %>
-                                    <button class="btn btn-outline-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
+                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
                                         onclick=<%- "deleteCategory('" + category.id + "')"%>>
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
