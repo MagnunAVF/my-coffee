@@ -78,7 +78,7 @@
 
     <script>
         // Cart Operations
-        // cart format = { "ID_1": { quantity: 1, name: 'x' }, "ID_2": { quantity: 1, name: 'y' }, ... }
+        // cart format = { "ID_1": { quantity: 1, name: 'x', price: '1.22' }, ... }
 
         const COOKIE_NAME = 'cart';
 
@@ -124,10 +124,10 @@
             return cart;
         }
 
-        function addItemToCart(id, quantity, name) {
+        function addItemToCart(id, quantity, name, price) {
             const cart = getCart();
 
-            cart[id] = { quantity, name };
+            cart[id] = { quantity, name, price };
 
             saveCart(cart);
 
@@ -172,7 +172,7 @@
             Cookies.set('shipping', selectedShippingId);
 
             // go to checkout page
-            window.location.href = encodeURI(REF_URL + '/payment');
+            window.location.href = encodeURI(REF_URL + '/orders/create');
         }
     </script>
 </body>
