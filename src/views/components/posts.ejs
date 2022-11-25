@@ -1,0 +1,18 @@
+<div class="d-flex flex-column align-items-center justify-content-center mx-0 my-3 p-2 bg-low-light-brown w-100">
+    <div class="w-100">
+        <h1 class="y-3 d-flex align-items-center justify-content-center">
+            <img src="/static/images/coffee-love.svg" class="img-fluid" alt="coffee-main-banner" width="50">
+            <u class="my-3">Blog Posts</u>
+        </h1>
+    </div>
+    
+    <div class="d-flex flex-wrap align-items-center justify-content-around m-0 p-2">
+        <% posts.forEach(function(post){ %>
+            <div class="flex-fill p-3 m-2 bg-white">
+                <h3><%- post.title %></h3>
+                <p class="m-0"><%- post.content %></p>
+                <p class="m-0 mt-3 font-weight-bold">Autor: <%- post.owner.name %></p>
+            </div>
+        <% }) %>
+    </div>
+</div>

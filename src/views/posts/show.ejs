@@ -1,0 +1,23 @@
+<div class="d-flex flex-wrap align-items-center justify-content-center w-100 h-100">
+    <div class="container w-100 h-100 my-3">
+        <h1 class="text-left"><u>Post Details</u></h1>
+        <div>
+            <a href="/posts">Go back</a>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center justify-content-center w-100 my-5">
+            <div class="card w-50">
+                <div class="card-header"><%- post.title %></div>
+                <div class="card-body">
+                    <div>
+                        <p><strong>ID: </strong><%- post.id %></p>
+                        <p><strong>Owner: </strong><%- post.owner.name %></p>
+                        <p><strong>Created At: </strong><%- post.createdAt %></p>
+                        <p><strong>Updated At: </strong><%- post.updatedAt %></p>
+                        <p><strong>Description: </strong><%- post.content %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

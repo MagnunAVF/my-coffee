@@ -1,0 +1,77 @@
+<div class="d-flex flex-wrap align-items-start justify-content-center h-100 w-100">
+    <div class="my-3">
+        <h1><u>User Orders</u></h1>
+
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Total (R$)</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Shipping Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach(function(order){ %>
+                    <tr>
+                        <th data-toggle="tooltip" data-placement="bottom" title=<%- order.id %>><%- order.id.substring(0,8) + '...' %></th>
+                        
+                        <td><%- order.total.toFixed(2) %></td>
+                        
+                        <td><%- order.paymentStatus %></td>
+                        <td><%- order.shippingStatus %></td>
+                        <td>
+                            <div class="d-flex flex-wrap">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=<%- "#modal" + order.id %>
+                                    data-toggle="tooltip" data-placement="bottom" title="View details">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                    
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id=<%- "modal" + order.id %> tabindex="-1" role="dialog"
+                                    aria-labelledby=<%- "modalLabel" + order.id %> aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id=<%- "modalLabel" + order.id %>>Order details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="w-100 my-2">
+                                                <p class="card-text"><strong>ID: </strong><%- order.id %></p>
+                                                <p class="card-text"><strong>Created at: </strong><%- order.createdAt %></p>
+                                                <p class="card-text"><strong>Updated at: </strong><%- order.updatedAt %></p>
+                                                <p class="card-text"><strong>Total: </strong><%- order.total %></p>
+                                                <p class="card-text"><strong>Shipping: </strong><%- order.shipping.name %> (R$ <%- order.shipping.price %>)</p>
+                                                <p class="card-text"><strong>Payment Status: </strong><%- order.paymentStatus %></p>
+                                                <p class="card-text"><strong>Shipping Status: </strong><%- order.shippingStatus %></p>
+
+                                                <p class="card-text"><strong>Products:</strong></p>
+                                                <div class="mb-5">
+                                                    <% if (order.products.length > 0) { %>
+                                                        <ul>
+                                                            <% order.products.forEach(function(prod){ %>
+                                                                <li> <%- prod.product.name %> (<strong>quantity:</strong> <%- order.productQuantities.filter(pq => pq.productId === prod.product.id)[0].quantity %> ; <strong>unit price:</strong> R$ <%- prod.product.price %>)</li>
+                                                            <% }) %>
+                                                        </ul>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+          </table>
+    </div>
+</div>

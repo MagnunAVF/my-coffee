@@ -1,0 +1,38 @@
+<div class="d-flex flex-wrap align-items-center justify-content-center w-100 h-100">
+    <div class="container w-100 h-100 my-3">
+        <h1 class="text-left"><u>Product Details</u></h1>
+        <div>
+            <a href="/products">Go back</a>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center justify-content-center w-100 my-5">
+            <div class="card w-50">
+                <div class="card-header"><%- product.name %></div>
+                <div class="card-body">
+        
+                    <img src=<%- product.imageUrl %> alt="Product image" class="w-100">
+                
+                    <div>
+                        <p><strong>ID: </strong><%- product.id %></p>
+                        <% if (product.categories.length > 0) { %>
+                            <p><strong>Categorias: </strong></p>
+                            <div class="mb-5">
+                                <% if (product.categories.length > 0) { %>
+                                    <% product.categories.forEach(function(c){ %>
+                                        <span class="badge badge-info"><%- c.category.name %></span>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                        <%} else { %>
+                            <p><strong>Categories: </strong>Without categories</p>
+                        <% } %>
+                        <p><strong>Created At: </strong><%- product.createdAt %></p>
+                        <p><strong>Updated At: </strong><%- product.updatedAt %></p>
+                        <p><strong>Description: </strong><%- product.description %></p>
+                        <p><strong>Price: </strong>R$ <%- product.price %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

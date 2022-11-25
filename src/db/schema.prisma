@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  email      String   @unique
+  name       String
+  type       String
+  password   String
+  posts      Post[]
+  addresses  Address[]
+  orders     Order[]
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  content     String
+  zipCode     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  canDelete   Boolean  @default(true)
+}
+
+model Post {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String   @unique
+  content     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  canDelete   Boolean  @default(true)
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  description String
+  price       Float
+  imageUrl    String
+  categories  ProductCategories[]
+  orders      ProductOrders[]
+  canDelete   Boolean  @default(true)
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  products    ProductCategories[]
+  canDelete   Boolean  @default(true)
+}
+
+model ProductCategories {
+  id          String    @id @default(uuid())
+  product     Product?  @relation(fields: [productId], references: [id])
+  category    Category? @relation(fields: [categoryId], references: [id])
+  productId   String?
+  categoryId  String?
+}
+
+model Order {
+  id                 String               @id @default(uuid())
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  products           ProductOrders[]
+  shipping           Shipping             @relation(fields: [shippingId], references: [id])
+  shippingId         String
+  owner              User                 @relation(fields: [ownerId], references: [id])
+  ownerId            String
+  paymentStatus      String
+  shippingStatus     String
+  productQuantities  ProductQuantity[]
+  total              Float
+  canDelete          Boolean  @default(false)
+}
+
+model ProductOrders {
+  id          String    @id @default(uuid())
+  product     Product?  @relation(fields: [productId], references: [id])
+  order       Order?    @relation(fields: [orderId], references: [id])
+  productId   String?
+  orderId     String?
+}
+
+model ProductQuantity {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  productId   String
+  quantity    Int
+  order       Order     @relation(fields: [orderId], references: [id])
+  orderId     String
+}
+
+model Shipping {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  description String
+  price       Float
+  orders      Order[]
+  canDelete   Boolean  @default(true)
+}

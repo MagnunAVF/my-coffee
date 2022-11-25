@@ -1,0 +1,139 @@
+<div class="d-flex flex-wrap align-items-start justify-content-center h-100 w-100">
+    <script>
+        const APP_URL = window.location.origin;
+
+        function generateUrl(route, type, message) {
+            return encodeURI(APP_URL + route + '?notification=' + message + '&type=' + type)
+        }
+
+        function errorAction(data) {
+            window.location.href = generateUrl('/categories', 'error', data.message);
+        }
+
+        async function deleteCategory(id) {
+            try {
+                const res = await fetch(
+                    '/categories/' + id,
+                    { method: 'DELETE'}
+                );
+
+                const data = await res.json();
+                if (res.status === 200) {
+                    window.location.href = generateUrl('/categories', 'success', data.message);
+                } else {
+                    errorAction(data);
+                }
+            } catch (error) {
+                errorAction({ message: "Error deleting category. Contact support for help." })
+            }
+
+        }
+    </script>
+
+    <div class="my-3">
+        <h1><u>Categories</u></h1>
+
+        <div class="w-100 my-5">
+            <form class="form-horizontal" method="post" action="/categories">
+                <div class="form-group">
+                    <label for="name" class="cols-sm-2 control-label">Create New Category</label>
+                    <div class="cols-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"></span>
+                            <input type="text" class="form-control" name="name" id="name"
+                                placeholder="Enter category name" />
+                            <div class="input-group-append">
+                                <button class="btn btn-success" type="submit"
+                                    data-toggle="tooltip" data-placement="bottom" title="create">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <h2>Categories List</h2>
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Updated At</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% categories.forEach(function(category){ %>
+                    <tr>
+                        <th data-toggle="tooltip" data-placement="bottom" title=<%- category.id %>><%- category.id.substring(0,8) + '...' %></th>
+                        <td><%- category.name %></td>
+                        <td><%- category.createdAt %></td>
+                        <td><%- category.updatedAt %></td>
+                        <td>
+                            <div class="d-flex flex-wrap">
+                                <button type="button" style="color: #fff!important" class="btn btn-warning m-1" data-toggle="modal" data-target=<%- "#modal" + category.id %> >
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
+
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id=<%- "modal" + category.id %> tabindex="-1" role="dialog"
+                                    aria-labelledby=<%- "modalLabel" + category.id %> aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id=<%- "modalLabel" + category.id %>>Edit Category</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="w-100 my-5">
+
+                                                <form class="form-horizontal" method="post" action=<%- '/categories/' + category.id + '?_method=PUT' %>>
+                                                    <div class="form-group">
+                                                        <label for="name" class="cols-sm-2 control-label">New Category Name</label>
+                                                        <div class="cols-sm-8">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"></span>
+                                                                <input type="text" class="form-control" name="name" id="name"
+                                                                    placeholder="Enter new category name" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group ">
+                                                        <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Save</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <% if (category.canDelete) { %>
+                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
+                                        onclick=<%- "deleteCategory('" + category.id + "')"%>>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                <%} else { %>
+                                    <button class="btn btn-secondary m-1" data-toggle="tooltip" data-placement="bottom" title="can't delete this register" disabled>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                <% } %>
+
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+          </table>
+    </div>
+</div>

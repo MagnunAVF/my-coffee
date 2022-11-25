@@ -1,0 +1,44 @@
+body {
+  background-color: #fff;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+main,
+.page-content {
+  min-height: calc(100vh - 120px);
+  width: 100vw;
+}
+
+.row {
+  max-width: 100vw;
+  min-height: calc(100vh - 120px);
+}
+
+footer {
+  height: 60px;
+}
+
+footer p {
+  margin: 0px;
+}
+
+nav {
+  height: 60px;
+}
+
+.bg-light-brown {
+  background-color: #8d6748!important;
+}
+
+.bg-low-light-brown {
+  background-color: #a3856c!important;
+}
+
+.other-link {
+  color: #fff!important;
+}
+
+a {
+  color: #8d6748!important;
+}
