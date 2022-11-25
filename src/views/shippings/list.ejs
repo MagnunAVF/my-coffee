@@ -33,7 +33,7 @@
     <div class="my-3">
         <h1><u>Shippings</u></h1>
 
-        <a href="/shippings/create" type="button" role="button" class="btn btn-outline-success m-3"
+        <a href="/shippings/create" type="button" role="button" style="color: #fff!important" class="btn btn-success m-3"
             data-toggle="tooltip" data-placement="bottom" title="create new shipping">
             <i class="fa-solid fa-plus"></i>  Create
         </a>
@@ -55,18 +55,25 @@
                         <td><%- shipping.price %></td>
                         <td>
                             <div class="d-flex flex-wrap">
-                                <a href=<%- "/shippings/" + shipping.id %> type="button" role="button" class="btn btn-outline-success m-1"
+                                <a href=<%- "/shippings/" + shipping.id %> type="button" role="button" style="color: #fff!important" class="btn btn-success m-1"
                                     data-toggle="tooltip" data-placement="bottom" title="view details">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
-                                <a href=<%- "/shippings/" + shipping.id + "/edit/"%> type="button" role="button" class="btn btn-outline-warning m-1"
+                                <a href=<%- "/shippings/" + shipping.id + "/edit/"%> type="button" role="button" style="color: #fff!important" class="btn btn-warning m-1"
                                     data-toggle="tooltip" data-placement="bottom" title="edit">
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
-                                <button class="btn btn-outline-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
-                                    onclick=<%- "deleteShipping('" + shipping.id + "')"%>>
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
+
+                                <% if (shipping.canDelete) { %>
+                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
+                                        onclick=<%- "deleteShipping('" + shipping.id + "')"%>>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                <%} else { %>
+                                    <button class="btn btn-secondary m-1" data-toggle="tooltip" data-placement="bottom" title="can't delete this register" disabled>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                <% } %>
                             </div>
                         </td>
                     </tr>

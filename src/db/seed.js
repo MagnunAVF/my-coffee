@@ -29,11 +29,13 @@ const usersData = [
 const postsData = [
   {
     title: 'Benefício do Café - Melhorar memória e concentração',
+    canDelete: false,
     content:
       'Por ser rico em cafeína, um composto estimulante do sistema nervoso central, o café ajuda a melhorar a memória e o estado de alerta, além de aumentar a capacidade de concentração e diminuir o sono.',
   },
   {
     title: 'Benefício do Café - Evitar a depressão',
+    canDelete: false,
     content:
       'Os polifenóis presentes em ótimas quantidades no café combatem os radicais livres e diminuem inflamações nas células do sistema nervoso central, o que contribui para reduzir a ansiedade e melhorar o humor, prevenindo quadros de depressão.',
   },
@@ -42,21 +44,26 @@ const postsData = [
 const categoriesData = [
   {
     name: 'Acessórios',
+    canDelete: false,
   },
   {
     name: 'Eletrônicos',
+    canDelete: false,
   },
   {
     name: 'Café em Grãos',
+    canDelete: false,
   },
   {
     name: 'Café',
+    canDelete: false,
   },
 ]
 
 const productsData = [
   {
     name: 'Jarra de vidro Hario 360 ml',
+    canDelete: false,
     description:
       'Perfeitamente desenhada para acomodar todos os coadores Hario V60, a jarra Range Server, em sua versão de 360ml, é o máximo em design e elegância ao servir um café. Você prepara seu café em um coador Hario diretamente na jarra, sem necessidade de suporte.',
     price: 244.01,
@@ -66,6 +73,7 @@ const productsData = [
   },
   {
     name: 'Cafeteira Individual com Moedor Hamilton Beach Preta 2 Xícaras 127V',
+    canDelete: false,
     description:
       'Uma das chaves para um café saboroso é usar grãos moídos na hora. Com a cafeteira individual com moedor automático da Hamilton Beach, você pode moer seus grãos de café favoritos e preparar até 400 ml de café coado imediatamente. Basta encher a câmara de moagem com os grãos, adicionar água e pressionar o botão moer / preparar. a cafeteira moerá automaticamente os grãos e distribuirá o café moído no filtro permanente.',
     price: 949.33,
@@ -75,6 +83,7 @@ const productsData = [
   },
   {
     name: 'Café Black Tucano Honey Coffee em grãos 250 g',
+    canDelete: false,
     description:
       'O café mais exótico da Black Tucano e que é uma edição limitada.Tradicionalmente conhecido como café de mel, é um café de origem única e processos nobres, cultivado artesanalmente nas Montanhas do Espírito Santo.',
     price: 37.55,
@@ -84,6 +93,7 @@ const productsData = [
   },
   {
     name: 'Café Constantino em grãos 250g',
+    canDelete: false,
     description:
       'Café especial, de origem única com grãos cuidadosamente selecionados em seu máximo ponto de maturação. Um café que agrada os mais exigentes dos paladares, com sabor frutado, notas de chocolate e nozes, em um blend especial das variedades Mundo Novo e Catauí Amarelo, que resultam em um café equilibrado, cremoso e aveludado.',
     price: 23.62,
@@ -93,6 +103,7 @@ const productsData = [
   },
   {
     name: 'Café Black Tucano Premium Blend em grãos 250 g',
+    canDelete: false,
     description:
       'Um blend para clientes especiais apreciadores de uma deliciosa combinação de cafés de diferentes origens. Em sua composição principal, disponibilizaremos grãos originários das melhores fazendas do Sul de Minas, Cerrado Mineiro e Mogiana Paulista.',
     price: 32.77,
@@ -107,16 +118,19 @@ const shippingsData = [
     name: 'Correios',
     description: 'Envio para outros estados',
     price: 23.54,
+    canDelete: false,
   },
   {
     name: 'Motoboy',
     description: 'Envio para localidades próximas',
     price: 13.01,
+    canDelete: false,
   },
   {
     name: 'Retirar',
     description: 'Retirada do produto pelo comprador',
     price: 0,
+    canDelete: false,
   },
 ]
 
@@ -124,6 +138,7 @@ const addressesData = [
   {
     content: 'Rua Independência 176, centro, Porto Alegre - RS',
     zipCode: '90040300',
+    canDelete: false,
   },
 ]
 
@@ -179,12 +194,12 @@ const createUser = async (user) => {
 
 const createCategory = async (category) => {
   try {
-    const { name } = category
+    const { name, canDelete } = category
 
     // Create Category
     const createdCategory = await prismaClient.category.create({
       data: {
-        name,
+        name, canDelete
       },
     })
 
@@ -239,14 +254,14 @@ const createProduct = async (product) => {
 
 const createShipping = async (shipping) => {
   try {
-    const { name, description, price } = shipping
+    const { name, description, price, canDelete } = shipping
 
     // Create Shipping
     const createdShipping = await prismaClient.shipping.create({
       data: {
         name,
         description,
-        price,
+        price, canDelete
       },
     })
 
@@ -275,6 +290,7 @@ const createOrder = async () => {
       shippingStatus: 'NOT SENDED',
       paymentStatus: 'PAID',
       total,
+      canDelete: false,
       shipping: {
         connect: {
           id: createdShippings[0].id,

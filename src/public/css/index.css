@@ -26,3 +26,19 @@ footer p {
 nav {
   height: 60px;
 }
+
+.bg-light-brown {
+  background-color: #8d6748!important;
+}
+
+.bg-low-light-brown {
+  background-color: #a3856c!important;
+}
+
+.other-link {
+  color: #fff!important;
+}
+
+a {
+  color: #8d6748!important;
+}
