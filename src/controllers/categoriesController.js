@@ -84,7 +84,7 @@ const deleteCategoryMethod = async (req, res) => {
 
       res
         .status(500)
-        .json({ message: 'Error deleting category. Contact support.ZZZ' })
+        .json({ message: 'Error deleting category. Contact support' })
     }
   }
 }

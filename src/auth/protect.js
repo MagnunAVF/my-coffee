@@ -7,17 +7,17 @@ const ADMIN_ROUTES = [
   '/posts/*',
   '/categories/*',
   '/shippings/',
+  '/orders/*',
 ]
 // exception routes (not admin)
-const PUBLIC_ROUTES = ['/products/showcase']
+const PUBLIC_ROUTES = ['/products/showcase', '/orders/user', '/orders/create']
 
 const protectRoute = async (req, res, next) => {
   const route = req.originalUrl
+  const isAPublicRoute = matchRoute(route, PUBLIC_ROUTES)
 
   // Check if user is authenticated
   if (!req.isAuthenticated()) {
-    const isAPublicRoute = matchRoute(route, PUBLIC_ROUTES)
-
     if (isAPublicRoute) {
       return next()
     } else {
@@ -39,7 +39,12 @@ const protectRoute = async (req, res, next) => {
       if (userType === 'admin') {
         return next()
       } else {
-        await renderWithError(req, res, 'index', 'Home', 'Invalid Page')
+        // client user logged
+        if (isAPublicRoute) {
+          return next()
+        } else {
+          await renderWithError(req, res, 'index', 'Home', 'Invalid Page')
+        }
       }
     } else {
       return next()
