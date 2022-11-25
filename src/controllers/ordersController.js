@@ -6,7 +6,7 @@ const {
 const { createOrder } = require('../models/order')
 const { getNewProducts } = require('../models/product')
 const { getShippings } = require('../models/shipping')
-const { validateCreditCard } = require('../utils/credit-card')
+const { validateCreditCard } = require('../utils/creditCard')
 const {
   renderWithError,
   defaultRenderParameters,
@@ -22,7 +22,7 @@ const listUserOrdersView = async (req, res) => {
 
 const createUserOrder = async (req, res) => {
   log.info('POST /orders/user route requested')
-  // rember to clear cookies after order creation with success
+
   try {
     // unpack cart info
     // cart format: ID_product_1,quantity_product_2;ID_product_1,quantity_product_2;...
@@ -46,7 +46,7 @@ const createUserOrder = async (req, res) => {
     await createOrder(userId, selectedShippingId, products)
 
     res.redirect(
-      '/?type=success&notification=Purchase made successfully. Wait for the confirmation email.'
+      '/?resetCart=true&type=success&notification=Purchase made successfully. Wait for the confirmation email.'
     )
   } catch (error) {
     log.error(error)
