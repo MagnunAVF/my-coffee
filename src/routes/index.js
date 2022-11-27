@@ -9,7 +9,10 @@ const {
   renderUserHome,
 } = require('../controllers/usersController')
 const { homeView } = require('../controllers/homeController')
-const { adminDashboardView } = require('../controllers/adminController')
+const {
+  adminDashboardView,
+  generateSalesReport,
+} = require('../controllers/adminController')
 const { protectRoute } = require('../auth/protect')
 
 const router = express.Router()
@@ -48,5 +51,6 @@ router.get('/logout', logoutUser)
 
 // Admin Area
 router.get('/admin', protectRoute, adminDashboardView)
+router.get('/sales-report', protectRoute, generateSalesReport)
 
 module.exports = router
