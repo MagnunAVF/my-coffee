@@ -41,7 +41,7 @@
                     </div>
         
                     <div class="form-group ">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Aplicar</button>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block login-button" onClick="saveSearchedCategories()">Aplicar</button>
                     </div>
                 </div>
             </div>
@@ -57,4 +57,51 @@
             <h3 class="my-3">Não foram encontrados produtos</h3>
         <% } %>
     </div>
+
+    <script>
+        // categories cache in localhost
+
+        const CATEGORIES_COOKIE_NAME = 'categories';
+
+        // After page Load events
+        function afterPageLoad() {
+            loadPreviousSearchedCategories();
+        }
+        document.onload = afterPageLoad();
+
+        function saveSearchedCategories() {
+            const categories = [];
+            const elements = $('[id^="check-"]');
+
+            for (let index = 0; index < elements.length; index++) {
+                const element = elements[index];
+
+                if(element.checked) {
+                    categories.push(element.value);
+                }
+            }
+
+            Cookies.set(CATEGORIES_COOKIE_NAME, categories);
+        }
+
+        function loadPreviousSearchedCategories() {
+            let categories = Cookies.get(CATEGORIES_COOKIE_NAME);
+
+            if (!categories || (categories === '')) {
+                categories = [];
+            } else {
+                categories = categories.split(',')
+            }
+
+            const elements = $('[id^="check-"]');
+
+            for (let index = 0; index < elements.length; index++) {
+                const element = elements[index];
+
+                if(categories.includes(element.value)) {
+                    element.checked = true;
+                }
+            }
+        }
+    </script>
 </div>
