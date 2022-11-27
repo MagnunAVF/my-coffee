@@ -21,7 +21,7 @@ const createProductView = async (req, res) => {
   log.info('GET /products/create route requested')
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Product Create'
+  params.title += ' - Criar Produto'
   params.categories = allCategories
 
   res.render('products/create', params)
@@ -37,8 +37,8 @@ const createProductRoute = async (req, res) => {
       req,
       res,
       'products/create',
-      'Product Create',
-      'Invalid attributes in product creation.',
+      'Criar Produto',
+      'Atributos inválidos ao criar o produto.',
       { categories: allCategories }
     )
   }
@@ -51,8 +51,8 @@ const createProductRoute = async (req, res) => {
         req,
         res,
         'products/create',
-        'Product Create',
-        'Product already exists.',
+        'Criar Produto',
+        'O produto já existe.',
         { categories: allCategories }
       )
     } else {
@@ -68,7 +68,7 @@ const createProductRoute = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Product created!',
+          message: 'Produto Criado!',
         }
 
         await renderProductsList(req, res, notification)
@@ -79,8 +79,8 @@ const createProductRoute = async (req, res) => {
           req,
           res,
           'products/create',
-          'Product Create',
-          'Error in Product creation. Contact support.',
+          'Criar Produto',
+          'Erro ao criar o produto. Entre em contato com o suporte.',
           { categories: allCategories }
         )
       }
@@ -96,13 +96,13 @@ const deleteProductMethod = async (req, res) => {
   try {
     await deleteProduct(id)
 
-    res.status(200).json({ message: 'Product deleted!' })
+    res.status(200).json({ message: 'Produto deletado!' })
   } catch (error) {
     log.error(error)
 
-    res
-      .status(500)
-      .json({ message: 'Error deleting product. Contact support.' })
+    res.status(500).json({
+      message: 'Erro ao deletar o produto. Entre em contato com o suporte.',
+    })
   }
 }
 
@@ -114,7 +114,7 @@ const productDetailstView = async (req, res) => {
   const product = await getProductById(id)
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Product Details'
+  params.title += ' - Detalhes do Produto'
   params.product = product
 
   res.render('products/show', params)
@@ -128,7 +128,7 @@ const editProductView = async (req, res) => {
   const product = await getProductById(id)
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Product Edit'
+  params.title += ' - Editar Produto'
   params.product = product
   params.categories = allCategories
 
@@ -144,7 +144,7 @@ const updateProductMethod = async (req, res) => {
   const { name, description, price, imageUrl, categories } = req.body
   if (!name || !description || !price || !imageUrl) {
     const notification = {
-      message: 'Invalid attributes in product update.',
+      message: 'Atributos inválidos ao atualizar o produto.',
       type: 'error',
     }
 
@@ -157,7 +157,7 @@ const updateProductMethod = async (req, res) => {
     if (!product) {
       const notification = {
         type: 'error',
-        message: 'Product not exists!',
+        message: 'O produto não existe!',
       }
 
       redirectWithNotification(res, `/products/${id}/edit`, notification)
@@ -176,7 +176,7 @@ const updateProductMethod = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Product updated!',
+          message: 'Produto atualizado!',
         }
 
         redirectWithNotification(res, `/products/${id}/edit`, notification)
@@ -185,7 +185,8 @@ const updateProductMethod = async (req, res) => {
 
         const notification = {
           type: 'error',
-          message: 'Error in Product creation. Contact support.',
+          message:
+            'Erro ao atualizar o produto. Entre em contato com o suporte.',
         }
 
         redirectWithNotification(res, `/products/${id}/edit`, notification)
@@ -230,7 +231,7 @@ const renderProductsList = async (req, res, notification) => {
   const products = await getProducts()
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Products List'
+  params.title += ' - Lista de Produtos'
   params.products = products
 
   if (!params.notification) params.notification = notification
@@ -240,7 +241,7 @@ const renderProductsList = async (req, res, notification) => {
 
 const renderShowCase = async (req, res, products, notification) => {
   const params = await defaultRenderParameters(req)
-  params.title += ' - Products Showcase'
+  params.title += ' - Produtos'
   params.products = products
   params.categories = allCategories
 

@@ -20,7 +20,7 @@ const createShippingView = async (req, res) => {
   log.info('GET /shippings/create route requested')
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Shipping Create'
+  params.title += ' - Criar Forma de Frete'
 
   res.render('shippings/create', params)
 }
@@ -35,8 +35,8 @@ const createShippingRoute = async (req, res) => {
       req,
       res,
       'shippings/create',
-      'Shipping Create',
-      'Invalid attributes in shipping creation.'
+      'Criar Forma de Frete',
+      'Atributos inválidos ao criar a forma de frete.'
     )
   }
   // Create Shipping
@@ -48,8 +48,8 @@ const createShippingRoute = async (req, res) => {
         req,
         res,
         'shippings/create',
-        'Shipping Create',
-        'Shipping already exists.'
+        'Criar Forma de Frete',
+        'A forma de frete já existe.'
       )
     } else {
       try {
@@ -63,7 +63,7 @@ const createShippingRoute = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Shipping created!',
+          message: 'Criar Forma de Freted!',
         }
 
         await renderShippingsList(req, res, notification)
@@ -74,8 +74,8 @@ const createShippingRoute = async (req, res) => {
           req,
           res,
           'shippings/create',
-          'Shipping Create',
-          'Error in Shipping creation. Contact support.'
+          'Criar Forma de Frete',
+          'Erro ao criar a forma de frete. Entre em contato com o suporte.'
         )
       }
     }
@@ -90,13 +90,14 @@ const deleteShippingMethod = async (req, res) => {
   try {
     await deleteShipping(id)
 
-    res.status(200).json({ message: 'Shipping deleted!' })
+    res.status(200).json({ message: 'Forma de frete deletada!' })
   } catch (error) {
     log.error(error)
 
-    res
-      .status(500)
-      .json({ message: 'Error deleting shipping. Contact support.' })
+    res.status(500).json({
+      message:
+        'Erro ao deletar a forma de frete. Entre em contato com o suporte.',
+    })
   }
 }
 
@@ -108,7 +109,7 @@ const shippingDetailstView = async (req, res) => {
   const shipping = await getShippingById(id)
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Shipping Details'
+  params.title += ' - Detalhes da Forma de Frete'
   params.shipping = shipping
 
   res.render('shippings/show', params)
@@ -122,7 +123,7 @@ const editShippingView = async (req, res) => {
   const shipping = await getShippingById(id)
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Shipping Edit'
+  params.title += ' - Editar Forma de Frete'
   params.shipping = shipping
 
   res.render('shippings/edit', params)
@@ -137,7 +138,7 @@ const updateShippingMethod = async (req, res) => {
   const { name, description, price } = req.body
   if (!name || !description || !price) {
     const notification = {
-      message: 'Invalid attributes in shipping update.',
+      message: 'Atributos inválidos ao atualizar a forma de frete.',
       type: 'error',
     }
 
@@ -150,7 +151,7 @@ const updateShippingMethod = async (req, res) => {
     if (!shipping) {
       const notification = {
         type: 'error',
-        message: 'Shipping not exists!',
+        message: 'A forma de frete já existe!',
       }
 
       redirectWithNotification(res, '/shippings', notification)
@@ -164,7 +165,7 @@ const updateShippingMethod = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Shipping updated!',
+          message: 'Forma de frete atualizada!',
         }
 
         redirectWithNotification(res, '/shippings', notification)
@@ -173,7 +174,8 @@ const updateShippingMethod = async (req, res) => {
 
         const notification = {
           type: 'error',
-          message: 'Error in Shipping creation. Contact support.',
+          message:
+            'Erro ao criar a forma de frete. Entre em contato com o suporte.',
         }
 
         redirectWithNotification(res, `/shippings/${id}/edit`, notification)
@@ -191,7 +193,7 @@ const renderShippingsList = async (req, res, notification) => {
   const shippings = await getShippings()
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Shippings List'
+  params.title += ' - Listar Formas de Frete'
   params.shippings = shippings
 
   if (!params.notification) params.notification = notification

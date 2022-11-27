@@ -16,7 +16,7 @@ const cartView = async (req, res) => {
     }
 
     const params = await defaultRenderParameters(req)
-    params.title += ' - Shopping Cart'
+    params.title += ' - Carrinho de Compras'
     params.shippings = shippings
     params.cart = cart
 
@@ -32,8 +32,8 @@ const cartView = async (req, res) => {
       req,
       res,
       'cart/index',
-      ' - Shopping Cart',
-      'Invalid cart',
+      ' - Carrinho de Compras',
+      'Carrinho inválido. Criando um novo.',
       data
     )
   }

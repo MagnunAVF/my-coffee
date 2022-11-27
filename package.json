@@ -35,6 +35,7 @@
     "loglevel": "^1.8.1",
     "loglevel-plugin-prefix": "^0.8.4",
     "method-override": "^3.0.0",
+    "nodemailer": "^6.8.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0"
   },

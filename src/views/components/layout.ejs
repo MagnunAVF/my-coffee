@@ -119,7 +119,7 @@
 
             saveCart(cart);
 
-            afterCartAction(true, 'Product added to cart!', '/products/showcase');
+            afterCartAction(true, 'Produto adicionado ao carrinho!', '/products/showcase');
         }
 
         function removeItemFromCart(id) {
@@ -129,7 +129,7 @@
 
             saveCart(cart);
 
-            afterCartAction(true, 'Product removed from cart!', '/cart');
+            afterCartAction(true, 'Produto removido do carrinho!', '/cart');
         }
 
         function incItemQuantity(itemId) {
@@ -139,7 +139,7 @@
 
             saveCart(cart);
 
-            afterCartAction(true, 'Increased product quantity', '/cart');
+            afterCartAction(true, 'Quantidade de produtos aumentada!', '/cart');
         }
 
         function decItemQuantity(itemId) {
@@ -150,7 +150,7 @@
 
                 saveCart(cart);
 
-                afterCartAction(true, 'Decreased product quantity', '/cart');
+                afterCartAction(true, 'Quantidade de produtos reduzida!', '/cart');
             }
         }
 

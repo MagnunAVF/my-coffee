@@ -1,22 +1,22 @@
 <div class="d-flex flex-wrap align-items-start justify-content-center h-100 w-100">
     <div class="container w-100 h-100 my-3">
-        <h1 class="text-left"><u>Edit Product</u></h1>
+        <h1 class="text-left"><u>Editar Produto</u></h1>
 
         <div class="w-100">
             <form class="form-horizontal" method="post" action=<%- '/products/' + product.id + '?_method=PUT' %>>
                 <div class="form-group">
-                    <label for="name" class="cols-sm-2 control-label">Name</label>
+                    <label for="name" class="cols-sm-2 control-label">Nome</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"></span>
                             <input type="text" class="form-control" name="name" id="name"
-                                placeholder="Enter product name" value=<%- product.name %> >
+                                placeholder="Insira o nome do produto" value=<%- product.name %> >
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="categories" class="cols-sm-2 control-label">Categories</label><br>
+                    <label for="categories" class="cols-sm-2 control-label">Categorias</label><br>
                     <% if (categories) { %>
                         <% const productCategories = product.categories.reduce((acc, val) => [...acc, val.category.name], []) %>
 
@@ -31,43 +31,43 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="description" class="cols-sm-2 control-label">Description</label>
+                    <label for="description" class="cols-sm-2 control-label">Descrição</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"></span>
                             <textarea type="text" class="form-control" name="description" id="description"
-                                placeholder="Enter product description" rows="3" ><%- product.description %></textarea>
+                                placeholder="Insira a descrição" rows="3" ><%- product.description %></textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="imageUrl" class="cols-sm-2 control-label">Image Url</label>
+                    <label for="imageUrl" class="cols-sm-2 control-label">Imagem do produto (URL)</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"></span>
                             <input type="text" class="form-control" name="imageUrl" id="imageUrl"
-                                placeholder="Enter product Image Url" value=<%- product.imageUrl %>>
+                                placeholder="Insira a url da imagem" value=<%- product.imageUrl %>>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="price" class="cols-sm-2 control-label">Price</label>
+                    <label for="price" class="cols-sm-2 control-label">Preço</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"></span>
                             <input type="number" step=0.01 class="form-control" name="price" id="price"
-                                placeholder="Enter product price" value=<%- "'" + product.price + "'"%>/>
+                                placeholder="Insira o preço" value=<%- "'" + product.price + "'"%>/>
                         </div>
                     </div>
                 </div>
     
                 <div class="form-group ">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Save</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Salvar</button>
                 </div>
                 <div>
-                    <a href="/products">Go back</a>
+                    <a href="/products">Voltar</a>
                 </div>
             </form>
         </div>
