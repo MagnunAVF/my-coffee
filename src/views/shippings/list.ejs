@@ -24,27 +24,27 @@
                     errorAction(data);
                 }
             } catch (error) {
-                errorAction({ message: "Error deleting shipping. Contact support for help." })
+                errorAction({ message: "Erro deletando a forma de frete. Entre em contato com o suporte." })
             }
 
         }
     </script>
 
     <div class="my-3">
-        <h1><u>Shippings</u></h1>
+        <h1><u>Formas de Frete</u></h1>
 
         <a href="/shippings/create" type="button" role="button" style="color: #fff!important" class="btn btn-success m-3"
             data-toggle="tooltip" data-placement="bottom" title="create new shipping">
-            <i class="fa-solid fa-plus"></i>  Create
+            <i class="fa-solid fa-plus"></i>  Criar
         </a>
 
         <table class="table table-hover">
             <thead>
               <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Price (R$)</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Preço (R$)</th>
+                <th scope="col">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -56,21 +56,21 @@
                         <td>
                             <div class="d-flex flex-wrap">
                                 <a href=<%- "/shippings/" + shipping.id %> type="button" role="button" style="color: #fff!important" class="btn btn-success m-1"
-                                    data-toggle="tooltip" data-placement="bottom" title="view details">
+                                    data-toggle="tooltip" data-placement="bottom" title="ver detalhes">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
                                 <a href=<%- "/shippings/" + shipping.id + "/edit/"%> type="button" role="button" style="color: #fff!important" class="btn btn-warning m-1"
-                                    data-toggle="tooltip" data-placement="bottom" title="edit">
+                                    data-toggle="tooltip" data-placement="bottom" title="editar">
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
 
                                 <% if (shipping.canDelete) { %>
-                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
+                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="deletar"
                                         onclick=<%- "deleteShipping('" + shipping.id + "')"%>>
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 <%} else { %>
-                                    <button class="btn btn-secondary m-1" data-toggle="tooltip" data-placement="bottom" title="can't delete this register" disabled>
+                                    <button class="btn btn-secondary m-1" data-toggle="tooltip" data-placement="bottom" title="Não é possível deletar esse registro" disabled>
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 <% } %>

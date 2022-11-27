@@ -24,24 +24,24 @@
                     errorAction(data);
                 }
             } catch (error) {
-                errorAction({ message: "Error deleting category. Contact support for help." })
+                errorAction({ message: "Erro ao deletar a categoria. Entre em contato com o suporte." })
             }
 
         }
     </script>
 
     <div class="my-3">
-        <h1><u>Categories</u></h1>
+        <h1><u>Categorias</u></h1>
 
         <div class="w-100 my-5">
             <form class="form-horizontal" method="post" action="/categories">
                 <div class="form-group">
-                    <label for="name" class="cols-sm-2 control-label">Create New Category</label>
+                    <label for="name" class="cols-sm-2 control-label">Criar Nova Categoria</label>
                     <div class="cols-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon"></span>
                             <input type="text" class="form-control" name="name" id="name"
-                                placeholder="Enter category name" />
+                                placeholder="Insira o nome da categoria" />
                             <div class="input-group-append">
                                 <button class="btn btn-success" type="submit"
                                     data-toggle="tooltip" data-placement="bottom" title="create">
@@ -59,10 +59,10 @@
             <thead>
               <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Created At</th>
-                <th scope="col">Updated At</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Criado em</th>
+                <th scope="col">Atualizado em</th>
+                <th scope="col">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -84,7 +84,7 @@
                                     <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                        <h5 class="modal-title" id=<%- "modalLabel" + category.id %>>Edit Category</h5>
+                                        <h5 class="modal-title" id=<%- "modalLabel" + category.id %>>Editar Categoria</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -94,37 +94,37 @@
 
                                                 <form class="form-horizontal" method="post" action=<%- '/categories/' + category.id + '?_method=PUT' %>>
                                                     <div class="form-group">
-                                                        <label for="name" class="cols-sm-2 control-label">New Category Name</label>
+                                                        <label for="name" class="cols-sm-2 control-label">Novo nome</label>
                                                         <div class="cols-sm-8">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon"></span>
                                                                 <input type="text" class="form-control" name="name" id="name"
-                                                                    placeholder="Enter new category name" />
+                                                                    placeholder="Insira o nome da categoria" />
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group ">
-                                                        <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Save</button>
+                                                        <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Salvar</button>
                                                     </div>
                                                 </form>
 
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                         </div>
                                     </div>
                                     </div>
                                 </div>
 
                                 <% if (category.canDelete) { %>
-                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
+                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="deletar"
                                         onclick=<%- "deleteCategory('" + category.id + "')"%>>
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 <%} else { %>
-                                    <button class="btn btn-secondary m-1" data-toggle="tooltip" data-placement="bottom" title="can't delete this register" disabled>
+                                    <button class="btn btn-secondary m-1" data-toggle="tooltip" data-placement="bottom" title="Não é possível deletar esse registro" disabled>
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 <% } %>

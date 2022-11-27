@@ -1,18 +1,18 @@
 <div class="d-flex flex-column align-items-center justify-content-center mx-0 my-3 p-2 bg-white w-100">
     <div class="w-100">
-        <h1 class="text-left mt-3"><u>Checkout Page</u></h1>
-        <p>Review your order below and enter credit card number.</p>
+        <h1 class="text-left mt-3"><u>Página de Pagamento</u></h1>
+        <p>Revise o seu pedido abaixo e insira os dados do cartão.</p>
     </div>
 
     <div class="d-flex flex-wrap align-items-center justify-content-center bg-white w-100">
         <% if (cart && Object.keys(cart).length > 0) { %>
-            <p><strong>Products</strong></p>
+            <p><strong>Produtos</strong></p>
             <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">Product</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price (Unit)</th>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">Preço (Unidade)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -27,17 +27,17 @@
             </table>
 
             <div class="d-flex flex-wrap flex-column align-items-center justify-content-center text-white bg-light-brown w-100">
-                <div class="p-1 mt-3"><strong>Selected Shipping</strong></div>
+                <div class="p-1 mt-3"><strong>Selecione a Forma de Frete</strong></div>
                 <% let selectedShipping = shippings.filter((s) => s.id === selectedShippingId)[0]; %>
                 <div class="p-1 mb-3"><%- selectedShipping.name %> (R$ <%- selectedShipping.price %>)</div>
 
-                <div class="p-1 mt-3"><strong>Order Total</strong></div>
+                <div class="p-1 mt-3"><strong>Total do Pedido</strong></div>
                 <% let total = Object.keys(cart).reduce((acc, val) => { acc += (parseFloat(cart[val].price) * parseInt(cart[val].quantity)); return acc }, 0.0) + selectedShipping.price; %>
                 <div class="p-1 mb-3">R$ <%- total.toFixed(2) %></div>
             </div>
             
             <div class="d-flex flex-wrap flex-column align-items-center justify-content-center bg-white w-100">
-                <div class="p-1 mt-3"><strong>Credit Card</strong></div>
+                <div class="p-1 mt-3"><strong>Cartão de Crédito</strong></div>
 
                 <form class="form-horizontal m-3" method="post" action="/orders/user">
                     <input type="hidden" name="cart" 
@@ -45,59 +45,59 @@
                     <input type="hidden" name="selectedShippingId" value=<%- selectedShippingId %> >
     
                     <div class="form-group">
-                        <label for="cardName" class="cols-sm-2 control-label">Card Name</label>
+                        <label for="cardName" class="cols-sm-2 control-label">Nome no Cartão</label>
                         <div class="cols-sm-10">
                             <div class="input-group">
                                 <span class="input-group-addon"></span>
                                 <input type="text" class="form-control" name="cardName" id="cardName"
-                                    placeholder="Enter the card owner name" rows="3"></input>
+                                    placeholder="Insira o nome do dono do cartão" rows="3"></input>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="cardNumber" class="cols-sm-2 control-label">Card Number</label>
+                        <label for="cardNumber" class="cols-sm-2 control-label">Número do Cartão</label>
                         <div class="cols-sm-10">
                             <div class="input-group">
                                 <span class="input-group-addon"></span>
                                 <input type="text" class="form-control" name="cardNumber" id="cardNumber"
-                                    placeholder="Enter product Card Number" rows="3"></input>
+                                    placeholder="Insira o número do cartão" rows="3"></input>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="cardExpiration" class="cols-sm-2 control-label">Card Expiration</label>
+                        <label for="cardExpiration" class="cols-sm-2 control-label">Validade</label>
                         <div class="cols-sm-10">
                             <div class="input-group">
                                 <span class="input-group-addon"></span>
                                 <input type="text" class="form-control" name="cardExpiration" id="cardExpiration"
-                                    placeholder="Enter product Card Expiration" rows="3"></input>
+                                    placeholder="Insira a data de validade" rows="3"></input>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="cvv" class="cols-sm-2 control-label">CVV</label>
+                        <label for="cvv" class="cols-sm-2 control-label">Código de Segurança (CVV)</label>
                         <div class="cols-sm-10">
                             <div class="input-group">
                                 <span class="input-group-addon"></span>
                                 <input type="text" class="form-control" name="cvv" id="cvv"
-                                    placeholder="Enter product cvv" rows="3"></input>
+                                    placeholder="Insira o código de segurança" rows="3"></input>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group ">
-                        <button type="submit" class="btn btn-success m-3">Buy</button>
+                        <button type="submit" class="btn btn-success m-3">Comprar</button>
                     </div>
                 </form>
             </div>
 
         <%} else { %>
             <div class="my-3">
-                <h3>No products in cart</h3>
-                <a href="/products/showcase">Go to products</a>
+                <h3>Sem produtos no carrinho</h3>
+                <a href="/products/showcase">Ir para lista de produtos</a>
             </div>
         <% } %>
     </div>

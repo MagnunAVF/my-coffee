@@ -24,7 +24,7 @@
                     errorAction(data);
                 }
             } catch (error) {
-                errorAction({ message: "Error deleting product. Contact support for help." })
+                errorAction({ message: "Erro deletando o produto. Entre em contato com o suporte." })
             }
 
         }
@@ -35,16 +35,16 @@
 
         <a href="/products/create" type="button" role="button" style="color: #fff!important" class="btn btn-success m-3"
             data-toggle="tooltip" data-placement="bottom" title="create new product">
-            <i class="fa-solid fa-plus"></i>  Create
+            <i class="fa-solid fa-plus"></i>  Criar
         </a>
 
         <table class="table table-hover">
             <thead>
               <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Price (R$)</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Preço (R$)</th>
+                <th scope="col">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -56,21 +56,21 @@
                         <td>
                             <div class="d-flex flex-wrap">
                                 <a href=<%- "/products/" + product.id %> type="button" role="button" style="color: #fff!important" class="btn btn-success m-1"
-                                    data-toggle="tooltip" data-placement="bottom" title="view details">
+                                    data-toggle="tooltip" data-placement="bottom" title="ver detalhes">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
                                 <a href=<%- "/products/" + product.id + "/edit/"%> type="button" role="button" style="color: #fff!important" class="btn btn-warning m-1"
-                                    data-toggle="tooltip" data-placement="bottom" title="edit">
+                                    data-toggle="tooltip" data-placement="bottom" title="editar">
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
                                 
                                 <% if (product.canDelete) { %>
-                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="delete"
+                                    <button class="btn btn-danger m-1" data-toggle="tooltip" data-placement="bottom" title="deletar"
                                         onclick=<%- "deleteProduct('" + product.id + "')"%>>
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 <%} else { %>
-                                    <button class="btn btn-secondary m-1" data-toggle="tooltip" data-placement="bottom" title="can't delete this register" disabled>
+                                    <button class="btn btn-secondary m-1" data-toggle="tooltip" data-placement="bottom" title="Não é possível deletar esse registro" disabled>
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 <% } %>
