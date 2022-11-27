@@ -4,6 +4,23 @@ const { getShippingById } = require('./shipping')
 const Order = prisma.order
 const ProductQuantity = prisma.ProductQuantity
 
+const getMonthOrders = async () => {
+  const currentMonth = new Date().getMonth() + 1
+
+  let orders = await Order.findMany({
+    include: {
+      owner: true,
+    },
+  })
+
+  // filter current month orders
+  orders = orders.filter(
+    (o) => currentMonth === new Date(o.createdAt).getMonth() + 1
+  )
+
+  return orders
+}
+
 const getOrdersByUser = async (userId) => {
   const orders = await Order.findMany({
     where: {
@@ -58,8 +75,8 @@ const createOrder = async (userId, shippingId, products) => {
 
   const creadtedOrder = await Order.create({
     data: {
-      shippingStatus: 'NOT SENDED',
-      paymentStatus: 'PAID',
+      shippingStatus: 'NÃO ENVIADO',
+      paymentStatus: 'PAGO',
       total,
       shipping: {
         connect: {
@@ -124,6 +141,7 @@ const addQuantityToProduct = async (productId, quantity, orderId) => {
 
 module.exports = {
   createOrder,
+  getMonthOrders,
   getOrdersByUser,
   getOrderById,
   updateOrderShippingStatus,

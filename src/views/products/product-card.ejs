@@ -3,7 +3,7 @@
     <div class="card-body d-flex flex-column align-items-around justify-content-between">
         <div>
             <h5 class="card-title"><%- product.name %></h5>
-            <p class="card-text"><strong>R$ <%- product.price %></strong></p>
+            <p class="card-text"><strong>R$ <%- product.price.toFixed(2) %></strong></p>
             
             <div class="mb-5">
                 <% if (product.categories.length > 0) { %>
@@ -16,11 +16,11 @@
 
       <div class="align-self-end">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target=<%- "#modal" + product.id %>
-                data-toggle="tooltip" data-placement="bottom" title="View details">
+                data-toggle="tooltip" data-placement="bottom" title="Ver detalhes">
                 <i class="fa-solid fa-eye"></i>
             </button>
 
-            <!-- Edit Modal -->
+            <!-- Product Details Modal -->
             <div class="modal fade" id=<%- "modal" + product.id %> tabindex="-1" role="dialog"
                 aria-labelledby=<%- "modalLabel" + product.id %> aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -35,7 +35,7 @@
                         <div class="w-100 my-5">
                             <img src=<%- product.imageUrl %> class="img-fluid" alt="product-image" alt="Product image" class="w-100">
 
-                            <p class="card-text"><strong>R$ <%- product.price %></strong></p>
+                            <p class="card-text"><strong>R$ <%- product.price.toFixed(2) %></strong></p>
 
                             <div class="mb-5">
                                 <% if (product.categories.length > 0) { %>
@@ -49,17 +49,17 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart"
+                        <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Adicionar ao carrinho"
                             onClick="addItemToCart('<%- product.id %>', 1, '<%- product.name %>', '<%- product.price %>')" >
                                 <i class="fa-solid fa-cart-plus"></i>
                         </button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     </div>
                 </div>
                 </div>
             </div>
 
-            <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add to cart"
+            <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Adicionar ao carrinho"
                 onClick="addItemToCart('<%- product.id %>', 1, '<%- product.name %>', '<%- product.price %>')" >
                 <i class="fa-solid fa-cart-plus"></i>
             </button>

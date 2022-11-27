@@ -9,6 +9,7 @@ const ADMIN_ROUTES = [
   '/shippings/',
   '/orders/*',
 ]
+const CLIENT_ROUTES = ['/cart/*', '/address/*', '/orders/*']
 // exception routes (not admin)
 const PUBLIC_ROUTES = ['/products/showcase', '/orders/user', '/orders/create']
 
@@ -26,7 +27,7 @@ const protectRoute = async (req, res, next) => {
         res,
         'users/login',
         'Login',
-        'Login to continue'
+        'Entre para continuar'
       )
     }
   } else {
@@ -37,13 +38,18 @@ const protectRoute = async (req, res, next) => {
       const userType = req.user.type
 
       if (userType === 'admin') {
-        return next()
+        const isAClientRoute = matchRoute(route, CLIENT_ROUTES)
+        if (isAClientRoute) {
+          res.redirect('/admin')
+        } else {
+          return next()
+        }
       } else {
         // client user logged
         if (isAPublicRoute) {
           return next()
         } else {
-          await renderWithError(req, res, 'index', 'Home', 'Invalid Page')
+          await renderWithError(req, res, 'users/login', 'Home', 'Invalid Page')
         }
       }
     } else {

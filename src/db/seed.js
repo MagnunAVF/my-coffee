@@ -199,7 +199,8 @@ const createCategory = async (category) => {
     // Create Category
     const createdCategory = await prismaClient.category.create({
       data: {
-        name, canDelete
+        name,
+        canDelete,
       },
     })
 
@@ -261,7 +262,8 @@ const createShipping = async (shipping) => {
       data: {
         name,
         description,
-        price, canDelete
+        price,
+        canDelete,
       },
     })
 
@@ -287,8 +289,8 @@ const createOrder = async () => {
 
   const createdOrder = await prismaClient.order.create({
     data: {
-      shippingStatus: 'NOT SENDED',
-      paymentStatus: 'PAID',
+      shippingStatus: 'NÃO ENVIADO',
+      paymentStatus: 'PAGO',
       total,
       canDelete: false,
       shipping: {
