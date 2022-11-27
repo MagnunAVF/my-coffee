@@ -48,11 +48,11 @@
                 <% for (let index = 0; index < shippings.length; index++) { %>
                     <% if (index === 0) { %>
                         <option selected value=<%- shippings[index].id %>>
-                            <%- shippings[index].name + ' - R$ ' + shippings[index].price %>
+                            <%- shippings[index].name + ' - R$ ' + shippings[index].price.toFixed(2) %>
                         </option>
                     <%} else { %>
                         <option value=<%- shippings[index].id %>>
-                            <%- shippings[index].name + ' - R$ ' + shippings[index].price %>
+                            <%- shippings[index].name + ' - R$ ' + shippings[index].price.toFixed(2) %>
                         </option>
                     <% } %>
                 <% } %>

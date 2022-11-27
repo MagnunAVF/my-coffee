@@ -58,8 +58,8 @@ const createOrder = async (userId, shippingId, products) => {
 
   const creadtedOrder = await Order.create({
     data: {
-      shippingStatus: 'NOT SENDED',
-      paymentStatus: 'PAID',
+      shippingStatus: 'NÃO ENVIADO',
+      paymentStatus: 'PAGO',
       total,
       shipping: {
         connect: {

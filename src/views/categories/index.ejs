@@ -70,8 +70,8 @@
                     <tr>
                         <th data-toggle="tooltip" data-placement="bottom" title=<%- category.id %>><%- category.id.substring(0,8) + '...' %></th>
                         <td><%- category.name %></td>
-                        <td><%- category.createdAt %></td>
-                        <td><%- category.updatedAt %></td>
+                        <td><%- category.createdAt.toLocaleString() %></td>
+                        <td><%- category.updatedAt.toLocaleString() %></td>
                         <td>
                             <div class="d-flex flex-wrap">
                                 <button type="button" style="color: #fff!important" class="btn btn-warning m-1" data-toggle="modal" data-target=<%- "#modal" + category.id %> >

@@ -289,8 +289,8 @@ const createOrder = async () => {
 
   const createdOrder = await prismaClient.order.create({
     data: {
-      shippingStatus: 'NOT SENDED',
-      paymentStatus: 'PAID',
+      shippingStatus: 'NÃO ENVIADO',
+      paymentStatus: 'PAGO',
       total,
       canDelete: false,
       shipping: {

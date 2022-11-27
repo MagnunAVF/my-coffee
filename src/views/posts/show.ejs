@@ -12,8 +12,8 @@
                     <div>
                         <p><strong>ID: </strong><%- post.id %></p>
                         <p><strong>Criador: </strong><%- post.owner.name %></p>
-                        <p><strong>Criado em: </strong><%- post.createdAt %></p>
-                        <p><strong>Atualizado em: </strong><%- post.updatedAt %></p>
+                        <p><strong>Criado em: </strong><%- post.createdAt.toLocaleString() %></p>
+                        <p><strong>Atualizado em: </strong><%- post.updatedAt.toLocaleString() %></p>
                         <p><strong>Descrição: </strong><%- post.content %></p>
                     </div>
                 </div>

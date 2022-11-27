@@ -26,10 +26,10 @@
                         <%} else { %>
                             <p><strong>Categorias: </strong>Sem categorias</p>
                         <% } %>
-                        <p><strong>Criado em: </strong><%- product.createdAt %></p>
-                        <p><strong>Atualizado em: </strong><%- product.updatedAt %></p>
+                        <p><strong>Criado em: </strong><%- product.createdAt.toLocaleString() %></p>
+                        <p><strong>Atualizado em: </strong><%- product.updatedAt.toLocaleString() %></p>
                         <p><strong>Descrição: </strong><%- product.description %></p>
-                        <p><strong>Preço: </strong>R$ <%- product.price %></p>
+                        <p><strong>Preço: </strong>R$ <%- product.price.toFixed(2) %></p>
                     </div>
                 </div>
             </div>

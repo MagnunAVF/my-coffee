@@ -11,10 +11,10 @@
                 <div class="card-body">
                     <div>
                         <p><strong>ID: </strong><%- shipping.id %></p>
-                        <p><strong>Criado em: </strong><%- shipping.createdAt %></p>
-                        <p><strong>Atualizado em: </strong><%- shipping.updatedAt %></p>
+                        <p><strong>Criado em: </strong><%- shipping.createdAt.toLocaleString() %></p>
+                        <p><strong>Atualizado em: </strong><%- shipping.updatedAt.toLocaleString() %></p>
                         <p><strong>Descrição: </strong><%- shipping.description %></p>
-                        <p><strong>Preço: </strong>R$ <%- shipping.price %></p>
+                        <p><strong>Preço: </strong>R$ <%- shipping.price.toFixed(2) %></p>
                     </div>
                 </div>
             </div>

@@ -42,10 +42,10 @@
                                         <div class="modal-body">
                                             <div class="w-100 my-2">
                                                 <p class="card-text"><strong>ID: </strong><%- order.id %></p>
-                                                <p class="card-text"><strong>Created at: </strong><%- order.createdAt %></p>
-                                                <p class="card-text"><strong>Updated at: </strong><%- order.updatedAt %></p>
+                                                <p class="card-text"><strong>Created at: </strong><%- order.createdAt.toLocaleString() %></p>
+                                                <p class="card-text"><strong>Updated at: </strong><%- order.updatedAt.toLocaleString() %></p>
                                                 <p class="card-text"><strong>Total: </strong><%- order.total %></p>
-                                                <p class="card-text"><strong>Shipping: </strong><%- order.shipping.name %> (R$ <%- order.shipping.price %>)</p>
+                                                <p class="card-text"><strong>Shipping: </strong><%- order.shipping.name %> (R$ <%- order.shipping.price.toFixed(2) %>)</p>
                                                 <p class="card-text"><strong>Payment Status: </strong><%- order.paymentStatus %></p>
                                                 <p class="card-text"><strong>Shipping Status: </strong><%- order.shippingStatus %></p>
 
@@ -54,7 +54,7 @@
                                                     <% if (order.products.length > 0) { %>
                                                         <ul>
                                                             <% order.products.forEach(function(prod){ %>
-                                                                <li> <%- prod.product.name %> (<strong>quantity:</strong> <%- order.productQuantities.filter(pq => pq.productId === prod.product.id)[0].quantity %> ; <strong>unit price:</strong> R$ <%- prod.product.price %>)</li>
+                                                                <li> <%- prod.product.name %> (<strong>quantity:</strong> <%- order.productQuantities.filter(pq => pq.productId === prod.product.id)[0].quantity %> ; <strong>unit price:</strong> R$ <%- prod.product.price.toFixed(2) %>)</li>
                                                             <% }) %>
                                                         </ul>
                                                     <% } %>

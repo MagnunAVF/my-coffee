@@ -52,7 +52,7 @@
                     <tr>
                         <th data-toggle="tooltip" data-placement="bottom" title=<%- shipping.id %>><%- shipping.id.substring(0,8) + '...' %></th>
                         <td><%- shipping.name %></td>
-                        <td><%- shipping.price %></td>
+                        <td><%- shipping.price.toFixed(2) %></td>
                         <td>
                             <div class="d-flex flex-wrap">
                                 <a href=<%- "/shippings/" + shipping.id %> type="button" role="button" style="color: #fff!important" class="btn btn-success m-1"
