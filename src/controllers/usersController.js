@@ -6,6 +6,7 @@ const {
   renderWithError,
 } = require('../utils/response')
 const { User } = require('../models/user')
+const { sendEmail } = require('../email')
 
 // Controller methods
 const registerView = async (req, res) => {
@@ -22,6 +23,7 @@ const registerUser = async (req, res) => {
 
   // validate attributes
   const { name, email, password, confirm } = req.body
+
   if (!name || !email || !password || !confirm) {
     await renderWithError(
       req,
@@ -67,6 +69,10 @@ const registerUser = async (req, res) => {
             type: 'client',
             password: encryptedPassword,
           },
+        })
+
+        await sendEmail('new-user', email, 'My Coffee - Conta Criada', {
+          user: { name },
         })
 
         const params = await defaultRenderParameters(req)
