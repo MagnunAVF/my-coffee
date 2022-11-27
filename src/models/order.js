@@ -105,6 +105,8 @@ const createOrder = async (userId, shippingId, products) => {
       await addQuantityToProduct(product.id, product.quantity, creadtedOrder.id)
     })
   )
+
+  return creadtedOrder
 }
 
 const updateOrderShippingStatus = async (orderId, status) => {
