@@ -8,7 +8,8 @@
             <a href="/cart" class="mx-2 other-link" data-toggle="tooltip" data-placement="bottom" title="Ir para carrinho">
                 <i class="fa-solid fa-cart-shopping"></i>
             </a>
-        <%} else { %>
+        <% } %>
+        <% if (!user) { %>
             <a href="/cart" class="mx-2 other-link" data-toggle="tooltip" data-placement="bottom" title="Ir para carrinho">
                 <i class="fa-solid fa-cart-shopping"></i>
             </a>
