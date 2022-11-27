@@ -1,3 +1,4 @@
+const { sendEmail } = require('../email')
 const {
   InvalidShippingError,
   InvalidCartError,
@@ -51,7 +52,24 @@ const createUserOrder = async (req, res) => {
     validateCreditCard(creditCardInfos)
 
     const userId = req.user.id
-    await createOrder(userId, selectedShippingId, products)
+    const creadtedOrder = await createOrder(
+      userId,
+      selectedShippingId,
+      products
+    )
+
+    await sendEmail(
+      'payment-status',
+      req.user.email,
+      'My Coffee - Mudança no status de pagamento',
+      {
+        user: { name: req.user.name },
+        order: {
+          id: creadtedOrder.id,
+          paymentStatus: creadtedOrder.paymentStatus,
+        },
+      }
+    )
 
     res.redirect(
       '/?resetCart=true&type=success&notification=Compra realizada com sucesso. Aguarde o email de confirmação.'
