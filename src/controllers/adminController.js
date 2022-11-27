@@ -4,7 +4,7 @@ const adminDashboardView = async (req, res) => {
   log.info('GET /admin route requested')
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Admin Dashboard'
+  params.title += ' - Painel Admin'
 
   res.render('adminDashboard', params)
 }

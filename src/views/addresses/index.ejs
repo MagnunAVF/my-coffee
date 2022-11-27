@@ -9,12 +9,12 @@
                 <form class="form-horizontal" method="post" action="/address">
             <% } %>
                 <div class="form-group">
-                    <label for="content" class="cols-sm-2 control-label">Full Address</label>
+                    <label for="content" class="cols-sm-2 control-label">Endereço</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"></span>
                             <input type="text" class="form-control" name="content" id="content"
-                                placeholder="Enter the full address" 
+                                placeholder="Insira o endereço completo"
                                 <% if (address) { %>
                                     <%- 'value="' + address.content + '"' %>
                                 <% } %>
@@ -24,12 +24,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="zipCode" class="cols-sm-2 control-label">Zip Code (CEP)</label>
+                    <label for="zipCode" class="cols-sm-2 control-label">Código Postal (CEP)</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"></span>
                             <input type="text" class="form-control" name="zipCode" id="zipCode"
-                                placeholder="Enter the zip code"
+                                placeholder="Insira o CEP"
                                 <% if (address) { %>
                                     <%- 'value="' + address.zipCode + '"' %>
                                 <% } %>

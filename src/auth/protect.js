@@ -26,7 +26,7 @@ const protectRoute = async (req, res, next) => {
         res,
         'users/login',
         'Login',
-        'Login to continue'
+        'Entre para continuar'
       )
     }
   } else {

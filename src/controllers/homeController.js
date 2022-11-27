@@ -7,7 +7,7 @@ const homeView = async (req, res) => {
   const products = await getNewProducts()
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Home Page'
+  params.title += ' - Página Inicial'
   params.products = products
 
   res.render('index', params)

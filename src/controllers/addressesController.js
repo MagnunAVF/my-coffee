@@ -22,8 +22,8 @@ const createAddressRoute = async (req, res) => {
       req,
       res,
       'addresses/index',
-      'Address Create',
-      'Invalid attributes in address creation.'
+      'Endereço',
+      'Atributos inválidos ao salvar o endereço.'
     )
   }
   // Create Address
@@ -36,8 +36,8 @@ const createAddressRoute = async (req, res) => {
         req,
         res,
         'addresses/index',
-        'Address Create',
-        'Address already exists.'
+        'Endereço',
+        'Já existe um endereço cadastrado.'
       )
     } else {
       try {
@@ -50,7 +50,7 @@ const createAddressRoute = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Address created!',
+          message: 'Endereço Salvo!',
         }
 
         await renderAddressesList(req, res, notification)
@@ -61,8 +61,8 @@ const createAddressRoute = async (req, res) => {
           req,
           res,
           'addresses/index',
-          'Address Create',
-          'Error in Address creation. Contact support.'
+          'Endereço',
+          'Erro ao salvar o endereço. Entre em contato com o suporte.'
         )
       }
     }
@@ -80,7 +80,7 @@ const updateAddressRoute = async (req, res) => {
   const { zipCode, content } = req.body
   if (!zipCode || !content) {
     const notification = {
-      message: 'Invalid attributes in address update.',
+      message: 'Atributos inválidos ao salvar o endereço.',
       type: 'error',
     }
 
@@ -93,7 +93,7 @@ const updateAddressRoute = async (req, res) => {
     if (!address) {
       const notification = {
         type: 'error',
-        message: 'Address not exists!',
+        message: 'Já existe um endereço cadastrado.',
       }
 
       renderAddressesList(req, res, notification)
@@ -106,7 +106,7 @@ const updateAddressRoute = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Address updated!',
+          message: 'Endereço salvo!',
         }
 
         renderAddressesList(req, res, notification)
@@ -115,7 +115,7 @@ const updateAddressRoute = async (req, res) => {
 
         const notification = {
           type: 'error',
-          message: 'Error in Address creation. Contact support.',
+          message: 'Erro ao salvar o endereço. Entre em contato com o suporte.',
         }
 
         renderAddressesList(req, res, notification)
@@ -135,7 +135,7 @@ const renderAddressesList = async (req, res, notification) => {
   const address = addressesList[0]
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Address Details'
+  params.title += ' - Endereço'
   params.address = address
 
   if (!params.notification) params.notification = notification

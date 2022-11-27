@@ -21,7 +21,7 @@ const createCategoryRoute = async (req, res) => {
   if (!name) {
     const notification = {
       type: 'error',
-      message: 'Invalid attributes in category creation.',
+      message: 'Atributos inválidos na criação da categoria.',
     }
 
     await renderCategoriesList(req, res, notification)
@@ -33,7 +33,7 @@ const createCategoryRoute = async (req, res) => {
     if (category) {
       const notification = {
         type: 'error',
-        message: 'Category already exists.',
+        message: 'A categoria já existe.',
       }
 
       await renderCategoriesList(req, res, notification)
@@ -47,7 +47,7 @@ const createCategoryRoute = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Category created!',
+          message: 'Categoria criada!',
         }
 
         await renderCategoriesList(req, res, notification)
@@ -56,7 +56,7 @@ const createCategoryRoute = async (req, res) => {
 
         const notification = {
           type: 'error',
-          message: 'Error in Category creation. Contact support.',
+          message: 'Erro ao criar a categoria. Entre em contato com o suporte.',
         }
 
         await renderCategoriesList(req, res, notification)
@@ -73,18 +73,18 @@ const deleteCategoryMethod = async (req, res) => {
   try {
     await deleteCategory(id)
 
-    res.status(200).json({ message: 'Category deleted!' })
+    res.status(200).json({ message: 'Categoria deletada!' })
   } catch (error) {
     if (error instanceof CategoryWithProductsError) {
       res
         .status(403)
-        .json({ message: 'Cannot delete a category with products!' })
+        .json({ message: 'Não é possível deletar uma categoria com produtos!' })
     } else {
       log.error(error)
 
-      res
-        .status(500)
-        .json({ message: 'Error deleting category. Contact support' })
+      res.status(500).json({
+        message: 'Erro deletando a categoria. Entre em contato com o suporte.',
+      })
     }
   }
 }
@@ -99,7 +99,7 @@ const updateCategoryMethod = async (req, res) => {
   if (!name) {
     const notification = {
       type: 'error',
-      message: 'Invalid attributes in category update.',
+      message: 'Atributos inválidos ao atualizar a categoria.',
     }
 
     await renderCategoriesList(req, res, notification)
@@ -111,7 +111,7 @@ const updateCategoryMethod = async (req, res) => {
     if (!category) {
       const notification = {
         type: 'error',
-        message: 'Category not exists!',
+        message: 'A categoria não existe!',
       }
 
       await renderCategoriesList(req, res, notification)
@@ -123,7 +123,7 @@ const updateCategoryMethod = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Category updated!',
+          message: 'Categoria atualizada!',
         }
 
         await renderCategoriesList(req, res, notification)
@@ -132,7 +132,7 @@ const updateCategoryMethod = async (req, res) => {
 
         const notification = {
           type: 'error',
-          message: 'Error in Category creation. Contact support.',
+          message: 'Erro ao criar a categoria. Entre em contato com o suporte.',
         }
 
         await renderCategoriesList(req, res, notification)
@@ -150,7 +150,7 @@ const renderCategoriesList = async (req, res, notification) => {
   const categories = await getCategories()
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Categories List'
+  params.title += ' - Lista de Categorias'
   params.categories = categories
 
   if (!params.notification) params.notification = notification

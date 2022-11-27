@@ -22,7 +22,7 @@ const listUserOrdersView = async (req, res) => {
   const orders = await getOrdersByUser(userId)
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - User Orders'
+  params.title += ' - Pedidos'
   params.orders = orders
 
   res.render('orders/user-list', params)
@@ -54,14 +54,14 @@ const createUserOrder = async (req, res) => {
     await createOrder(userId, selectedShippingId, products)
 
     res.redirect(
-      '/?resetCart=true&type=success&notification=Purchase made successfully. Wait for the confirmation email.'
+      '/?resetCart=true&type=success&notification=Compra realizada com sucesso. Aguarde o email de confirmação.'
     )
   } catch (error) {
     log.error(error)
 
     if (error instanceof CreditCardError) {
       const notification = {
-        message: 'Payment denied. Try another credit card.',
+        message: 'Pagamento negado. Tente outro cartão de crédito.',
         type: 'error',
       }
 
@@ -74,8 +74,8 @@ const createUserOrder = async (req, res) => {
         req,
         res,
         'index',
-        'Home',
-        'Error in payment. Contact support.',
+        'Página Inicial',
+        'Erro no pagamento. Entre em contato com o suporte.',
         data
       )
     }
@@ -111,7 +111,7 @@ const renderOrderPage = async (req, res, notification, cookies) => {
         if (!shipping) throw new InvalidShippingError()
 
         const params = await defaultRenderParameters(req)
-        params.title += ' - Order create'
+        params.title += ' - Pedido'
         params.shippings = shippings
         params.selectedShippingId = shipping
         params.cart = cart
@@ -125,22 +125,22 @@ const renderOrderPage = async (req, res, notification, cookies) => {
     } catch (error) {
       log.error(error)
 
-      let message = 'Error in order page. Contact support.'
+      let message = 'Erro na página de pedidos. Entre em contato com o suporte.'
 
       if (error instanceof InvalidShippingError) {
-        message = 'Invalid shipping in order'
+        message = 'Forma de frete inválida.'
       } else if (error instanceof InvalidCartError) {
-        message = 'Invalid cart in order'
+        message = 'Carrinho inválido.'
       }
 
       const products = await getNewProducts()
       const data = { products }
 
-      await renderWithError(req, res, 'index', 'Home', message, data)
+      await renderWithError(req, res, 'index', 'Página Inicial', message, data)
     }
   } else {
     res.redirect(
-      '/login?type=error&notification=You must login to go to payment. After this, go to cart again.'
+      '/login?type=error&notification=Você precisa ter feito o login para realizar a compra. Após isso acesse o carrinho novamente.'
     )
   }
 }

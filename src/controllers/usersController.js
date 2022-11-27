@@ -119,7 +119,8 @@ const loginUser = async (req, res) => {
     // Authenticate User
     passport.authenticate('local', {
       successRedirect: '/user-home',
-      failureRedirect: '/login?type=error&notification=Wrong login data. Insert correct data.',
+      failureRedirect:
+        '/login?type=error&notification=Wrong login data. Insert correct data.',
       failureFlash: true,
     })(req, res)
   }

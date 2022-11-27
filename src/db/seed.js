@@ -199,7 +199,8 @@ const createCategory = async (category) => {
     // Create Category
     const createdCategory = await prismaClient.category.create({
       data: {
-        name, canDelete
+        name,
+        canDelete,
       },
     })
 
@@ -261,7 +262,8 @@ const createShipping = async (shipping) => {
       data: {
         name,
         description,
-        price, canDelete
+        price,
+        canDelete,
       },
     })
 

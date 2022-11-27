@@ -20,7 +20,7 @@ const createPostView = async (req, res) => {
   log.info('GET /posts/create route requested')
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Post Create'
+  params.title += ' - Criar Artigo'
 
   res.render('posts/create', params)
 }
@@ -36,7 +36,7 @@ const createPostRoute = async (req, res) => {
       res,
       'posts/create',
       'Post Create',
-      'Invalid attributes in post creation.'
+      'Atributos inválidos ao criar o artigo.'
     )
   }
   // Create Post
@@ -49,7 +49,7 @@ const createPostRoute = async (req, res) => {
         res,
         'posts/create',
         'Post Create',
-        'Post already exists.'
+        'O artigo já existe.'
       )
     } else {
       try {
@@ -63,7 +63,7 @@ const createPostRoute = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Post created!',
+          message: 'Artigo criado!',
         }
 
         await renderPostsList(req, res, notification)
@@ -75,7 +75,7 @@ const createPostRoute = async (req, res) => {
           res,
           'posts/create',
           'Post Create',
-          'Error in Post creation. Contact support.'
+          'Erro ao criar o artigo. Entre em contato com o suporte.'
         )
       }
     }
@@ -90,11 +90,13 @@ const deletePostMethod = async (req, res) => {
   try {
     await deletePost(id)
 
-    res.status(200).json({ message: 'Post deleted!' })
+    res.status(200).json({ message: 'Artigo deletado!' })
   } catch (error) {
     log.error(error)
 
-    res.status(500).json({ message: 'Error deleting post. Contact support.' })
+    res.status(500).json({
+      message: 'Erro ao deletar o artigo. Entre em contato com suporte.',
+    })
   }
 }
 
@@ -106,7 +108,7 @@ const postDetailstView = async (req, res) => {
   const post = await getPostById(id)
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Post Details'
+  params.title += ' - Detalhes do Artigo'
   params.post = post
 
   res.render('posts/show', params)
@@ -120,7 +122,7 @@ const editPostView = async (req, res) => {
   const post = await getPostById(id)
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Post Edit'
+  params.title += ' - Editar Artigo'
   params.post = post
 
   res.render('posts/edit', params)
@@ -135,7 +137,7 @@ const updatePostMethod = async (req, res) => {
   const { title, content } = req.body
   if (!title || !content) {
     const notification = {
-      message: 'Invalid attributes in post update.',
+      message: 'Atributos inválidos ao atualizar o artigo',
       type: 'error',
     }
 
@@ -148,7 +150,7 @@ const updatePostMethod = async (req, res) => {
     if (!post) {
       const notification = {
         type: 'error',
-        message: 'Post not exists!',
+        message: 'O artigo não existe!',
       }
 
       redirectWithNotification(res, '/posts', notification)
@@ -161,7 +163,7 @@ const updatePostMethod = async (req, res) => {
 
         const notification = {
           type: 'success',
-          message: 'Post updated!',
+          message: 'Artigo atualizado!',
         }
 
         redirectWithNotification(res, '/posts', notification)
@@ -170,7 +172,8 @@ const updatePostMethod = async (req, res) => {
 
         const notification = {
           type: 'error',
-          message: 'Error in Post creation. Contact support.',
+          message:
+            'Erro ao atualizar o artigo. Entre em contato com o suporte.',
         }
 
         redirectWithNotification(res, `/posts/${id}/edit`, notification)
@@ -188,7 +191,7 @@ const renderPostsList = async (req, res, notification) => {
   const posts = await getPosts()
 
   const params = await defaultRenderParameters(req)
-  params.title += ' - Posts List'
+  params.title += ' - Artigos'
   params.posts = posts
 
   if (!params.notification) params.notification = notification
